@@ -95,14 +95,20 @@ this environment.
 
    ```
    sudo apt install wireshark tcpdump
-   sudo apt install python3-scapy python3-pcapy python3-pip python3-graphviz virtualenv
+   sudo apt install python3-scapy python3-pip python3-pygraphviz virtualenv
    sudo apt install git tmux vim
    ```
 
    Of course, you are welcome to install whatever other tools and utilities
    that you think will improve your development environment.
 
-14. Run the following command to modify the behavior of `sudo` by editing
+14. Run the following to give `tcpdump` and `wireshark` targeted capabilities, so an
+   unprivileged user can run them to sniff network packets with elevating to `root`:
+   ```
+   sudo setcap cap_net_raw=eip /usr/bin/tcpdump; sudo setcap cap_net_raw=eip /usr/bin/wireshark
+   ```
+
+15. Run the following command to modify the behavior of `sudo` by editing
    `/etc/sudoers`:
 
    ```
