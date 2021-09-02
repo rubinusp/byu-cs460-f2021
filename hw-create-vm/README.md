@@ -72,62 +72,67 @@ this environment.
 9. Reboot your VM to have the changes take effect.
 
 10. On the host machine, select "Devices" from the VirtualBox menu, then select
-   "Shared Folders", then "Shared Folders Settings...".  Click the button to
-   add a shared folder, then choose which host folder to share and, optionally,
-   where it will mount on the guest filesystem (e.g., `/home/username/host`, where
-   `username` is your actual username).  Selecting both "Auto-mount" and
-   "Make permanent" is recommended.  For more information see the [official
-   documentation](https://docs.oracle.com/en/virtualization/virtualbox/6.0/user/sharedfolders.html).
+    "Shared Folders", then "Shared Folders Settings...".  Click the button to
+    add a shared folder, then choose which host folder to share and, optionally,
+    where it will mount on the guest filesystem (e.g., `/home/username/host`, where
+    `username` is your actual username).  Selecting both "Auto-mount" and
+    "Make permanent" is recommended.  For more information see the [official
+    documentation](https://docs.oracle.com/en/virtualization/virtualbox/6.0/user/sharedfolders.html).
    
 11. On the host machine, select "Devices" from the VirtualBox menu, then select
-   "Shared Clipboard", then "Bidirectional".
+    "Shared Clipboard", then "Bidirectional".
 
 12. Run the following to remove some unnecessary
-   packages from your VM:
+    packages from your VM:
 
-   ```
-   $ sudo apt purge libreoffice-{impress,math,writer,draw,base-core,core,help-common}
-   $ sudo apt autoremove
-   ```
+    ```
+    $ sudo apt purge libreoffice-{impress,math,writer,draw,base-core,core,help-common,core-nogui} xscreensaver
+    $ sudo apt autoremove
+    ```
 
 13. Run the following to install a few packages that will be useful for you in
-   this class:
+    this class:
 
-   ```
-   sudo apt install wireshark tcpdump
-   sudo apt install python3-scapy python3-pip python3-pygraphviz virtualenv
-   sudo apt install git tmux vim
-   ```
+    ```
+    $ sudo apt install wireshark tcpdump
+    $ sudo apt install python3-scapy python3-pip python3-pygraphviz virtualenv
+    $ sudo apt install git tmux vim
+    ```
 
-   Of course, you are welcome to install whatever other tools and utilities
-   that you think will improve your development environment.
+    At the prompt "Should non-superusers be able to capture packets?", select
+    "No".
 
-14. Run the following to give `tcpdump` and `wireshark` targeted capabilities, so an
-   unprivileged user can run them to sniff network packets with elevating to `root`:
-   ```
-   sudo setcap cap_net_raw=eip /usr/bin/tcpdump; sudo setcap cap_net_raw=eip /usr/bin/wireshark
-   ```
+    You are also welcome to install whatever other tools and utilities that you
+    think will improve your development environment.
+
+14. Run the following to give `tcpdump`, `wireshark`, and `dumpcap` targeted capabilities,
+    so an unprivileged user can run them to sniff network packets without elevating to `root`:
+    ```
+    $ sudo setcap cap_net_raw=eip /usr/bin/tcpdump
+    $ sudo setcap cap_net_raw=eip /usr/bin/wireshark
+    $ sudo setcap cap_net_raw=eip /usr/bin/dumpcap
+    ```
 
 15. Run the following command to modify the behavior of `sudo` by editing
-   `/etc/sudoers`:
+    `/etc/sudoers`:
 
-   ```
-   sudo visudo
-   ```
+    ```
+    $ sudo visudo
+    ```
 
-   Modify the following line:
-   ```
-   %sudo   ALL=(ALL:ALL) ALL
-   ```
-   to be:
-   ```
-   %sudo   ALL=(ALL:ALL) NOPASSWD: ALL
-   ```
-   This allows you to use `sudo` without having to enter your password.
+    Modify the following line:
+    ```
+    %sudo   ALL=(ALL:ALL) ALL
+    ```
+    to be:
+    ```
+    %sudo   ALL=(ALL:ALL) NOPASSWD: ALL
+    ```
+    This allows you to use `sudo` without having to enter your password.
 
-   Add this line to the file:
-   ```
-   Defaults        env_keep += PYTHONPATH
-   ```
-   This preserves the `PYTHONPATH` environment variable when `sudo` is used,
-   rather than resetting it.
+    Add this line to the file:
+    ```
+    Defaults        env_keep += PYTHONPATH
+    ```
+    This preserves the `PYTHONPATH` environment variable when `sudo` is used,
+    rather than resetting it.
