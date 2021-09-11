@@ -1,4 +1,4 @@
-# Virtual Network Introduction
+# Hands-On with the Link Layer
 
 The objectives of this assignment are to 1) familiarize you with the framework
 that you will be using for the remainder of class on which your labs will be
