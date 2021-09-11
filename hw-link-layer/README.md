@@ -82,6 +82,15 @@ through ARP--which we haven't studied yet.  The second line in each snippet
 rule.  This allows us to do a `ping` and only focus on the request.
 
 
+Finally, reset the MAC address tables in each of the switches by running the
+following from the `s1` terminal:
+
+```
+s1$ sudo ovs-appctl fdb/flush s1
+s1$ sudo ovs-appctl fdb/flush s2
+```
+
+
 ## Begin Packet Capture
 Now go to the open Wireshark window, click the "Capture Options" button (the
 gear icon).  Select all interfaces starting with `s1-` or `s2-` (our two
