@@ -193,7 +193,8 @@ on the interfaces.
     difference?
 
 
- 8. Now stop (`Ctrl`-`c`) the network and re-start it with:
+ 8. Now stop (`Ctrl`-`c`) the network and re-start a variant of the previous
+    configuration with:
     
     ```
     $ cougarnet --display h6-s2.cfg
@@ -212,6 +213,6 @@ on the interfaces.
     ```
 
     Is the outcome different than it was in the previous problem?  Why or why
-    not?
+    not?  Use the difference in configuration files to determine the answer.
 
 
