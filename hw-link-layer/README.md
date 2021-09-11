@@ -26,9 +26,9 @@ $ sudo python3 setup.py install
 ```
 
 Familiarize yourself with the [Cougarnet
-documentation](#https://github.com/cdeccio/cougarnet/blob/main/README.md), and
+documentation](https://github.com/cdeccio/cougarnet/blob/main/README.md), and
 complete *at least* the ["Getting
-Started"](#https://github.com/cdeccio/cougarnet/blob/main/README.md#getting-started)
+Started"](https://github.com/cdeccio/cougarnet/blob/main/README.md#getting-started)
 exercise.  You are welcome to poke around and experiment.
 
 
