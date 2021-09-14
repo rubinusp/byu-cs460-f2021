@@ -12,13 +12,13 @@ developed, and 2) gain hands-on experience with switches and VLANS.
 To make sure you have the packages that you need installed on your system, run
 the following:
 
-```
+```bash
 $ sudo apt install git wireshark tcpdump python3-pygraphviz socat openvswitch-switch libgraph-easy-perl
 ```
 
 Then clone the Cougarnet repository, and build and install it:
 
-```
+```bash
 $ git clone https://github.com/cdeccio/cougarnet/
 $ cd cougarnet
 $ python3 setup.py build
@@ -41,7 +41,7 @@ VLAN 30.
    
 Run the following command to create and start the network:
 
-```
+```bash
 cougarnet --display -w s1 h6-s2-vlan.cfg
 ```
 
@@ -60,7 +60,7 @@ to focus on the link layer.
 
 Run the following in host `b`:
 
-```
+```bash
 b$ sudo ip neigh add 10.0.0.5 lladdr 00:00:00:ee:ee:ee dev b-s1
 b$ sudo iptables -I INPUT -j DROP
 ```
@@ -69,7 +69,7 @@ b$ sudo iptables -I INPUT -j DROP
 
 and run the following in host `e`:
 
-```
+```bash
 e$ sudo ip neigh add 10.0.0.2 lladdr 00:00:00:bb:bb:bb dev e-s2
 e$ sudo iptables -I INPUT -j DROP
 ```
@@ -85,7 +85,7 @@ rule.  This allows us to do a `ping` and only focus on the request.
 Finally, reset the MAC address tables in each of the switches by running the
 following from the `s1` terminal:
 
-```
+```bash
 s1$ sudo ovs-appctl fdb/flush s1
 s1$ sudo ovs-appctl fdb/flush s2
 ```
@@ -103,7 +103,7 @@ on the interfaces.
  1. Run the following command on `s1` to show the state of the MAC address
     tables:
 
-    ```
+    ```bash
     s1$ sudo ovs-appctl fdb/show s1
     s1$ sudo ovs-appctl fdb/show s2
     ```
@@ -113,7 +113,7 @@ on the interfaces.
 
  2. Run the following command on `b` to send a single frame from `b` to `e`:
    
-    ```
+    ```bash
     b$ ping -c 1 -W e
     ```
 
@@ -137,7 +137,7 @@ on the interfaces.
  4. Run the following command on `s1` to show the state of the MAC address
     tables:
 
-    ```
+    ```bash
     s1$ sudo ovs-appctl fdb/show s1
     s1$ sudo ovs-appctl fdb/show s2
     ```
@@ -147,7 +147,7 @@ on the interfaces.
 
  5. Run the following command on `e` to send a single frame from `e` to `b`:
    
-    ```
+    ```bash
     e$ ping -c 1 -W b
     ```
 
@@ -159,7 +159,7 @@ on the interfaces.
  6. Run the following command on `s1` to show the state of the MAC address
     tables:
 
-    ```
+    ```bash
     s1$ sudo ovs-appctl fdb/show s1
     s1$ sudo ovs-appctl fdb/show s2
     ```
@@ -171,7 +171,7 @@ on the interfaces.
     `Ctrl-c to quit`.  Now enter `Ctrl`-`c`.  Then re-start the network with
     the following:
    
-    ```
+    ```bash
     $ cougarnet --display h6-s2-vlan.cfg
     ```
 
@@ -179,13 +179,13 @@ on the interfaces.
     [previously](#prepare-the-host-for-link-layer-analysis).
     Now run the following from host `b`:
 
-    ```
+    ```bash
     b$ ping -c 5 -W 1 e
     ```
 
     Then:
 
-    ```
+    ```bash
     b$ ping -c 5 -W 1 c
     ```
 
@@ -196,19 +196,19 @@ on the interfaces.
  8. Now stop (`Ctrl`-`c`) the network and re-start a variant of the previous
     configuration with:
     
-    ```
+    ```bash
     $ cougarnet --display h6-s2.cfg
     ```
 
     Now run the following from host `b`:
 
-    ```
+    ```bash
     b$ ping -c 5 -W 1 e
     ```
 
     Then:
 
-    ```
+    ```bash
     b$ ping -c 5 -W 1 c
     ```
 
