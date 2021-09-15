@@ -114,7 +114,7 @@ on the interfaces.
  2. Run the following command on `b` to send a single frame from `b` to `e`:
    
     ```bash
-    b$ ping -c 1 -W e
+    b$ ping -c 1 -W 1 e
     ```
 
     (The `-c` option tells `ping` to send just one packet, and the `-W` option
@@ -148,7 +148,7 @@ on the interfaces.
  5. Run the following command on `e` to send a single frame from `e` to `b`:
    
     ```bash
-    e$ ping -c 1 -W b
+    e$ ping -c 1 -W 1 b
     ```
 
     Look again at the running packet capture, sorted by the "Time" column.
