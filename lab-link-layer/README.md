@@ -319,9 +319,9 @@ Note that there are libraries for parsing Ethernet frames and higher-level
 packets, but you may not use them for the lab.
 
 
-### Sending and Receiving
+### Sending and Receiving Frames
 
-Sending and receiving packets is described in the
+Sending and receiving frames is described in the
 [documentation](https://github.com/cdeccio/cougarnet/blob/main/README.md#sending-and-receiving-frames).
 
 
