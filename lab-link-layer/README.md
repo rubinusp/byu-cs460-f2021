@@ -307,7 +307,7 @@ packets, but you may not use them for the lab.
 ### Sending and Receiving
 
 Sending and receiving packets is described in the
-(documentation)[https://github.com/cdeccio/cougarnet/blob/main/README.md#sending-and-receiving-frames]
+[documentation](https://github.com/cdeccio/cougarnet/blob/main/README.md#sending-and-receiving-frames).
 
 
 # Submission
