@@ -325,6 +325,26 @@ Sending and receiving frames is described in the
 [documentation](https://github.com/cdeccio/cougarnet/blob/main/README.md#sending-and-receiving-frames).
 
 
+### Other Helps
+
+ - Use Wireshark to see what is going on!  This is probably most helpful by
+   running `cougarnet` using `--wireshark=s1`.
+ - Print to standard out for debugging purposes.  For a script running in a
+   virtual host (i.e., with the `prog` option), all output will go to the
+   terminal associated with that host, assuming `terminal=false` is not used in
+   the configuration file and `--terminal=none` is not used on the command
+   line.  See
+   [the documentation](https://github.com/cdeccio/cougarnet/blob/main/README.md#additional-options).
+   for more.
+ - You can modify `host.py` and the scenario files all you want for testing and
+   for experimentation.  If this helps you, please do it!  Just note that your
+   submission will be graded using only your `switch.py`; the `host.py` and
+   scenario files used will be the stock files [you were provided](#resources-provided).
+ - Save your work often, especially after you finish Part 1 and move on to
+   Part 2.  You are welcome (and encouraged) to use a version control
+   repository, such as GitHub.  However, please ensure that it is a private repository!
+
+
 # Submission
 
 Upload your functional `switch.py` to the assignment page on LearningSuite.
