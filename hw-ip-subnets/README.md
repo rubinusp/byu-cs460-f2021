@@ -29,7 +29,7 @@ for you to do one before the other.
 When you have finished your revisions of `subnet.py`:
 
  - The return values in the doc tests must be correct; and
- - The following should run without error:
+ - The following should run without error (and without output):
    ```
    python3 -m doctest subnet.py
    ```
