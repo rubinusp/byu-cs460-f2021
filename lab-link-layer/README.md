@@ -186,21 +186,21 @@ that times are approximate).  Each sub-bullet describes the purpose of the prima
 bullet under which it is listed.  That is, it describes what is being tested.
 
  - 4 seconds: frame sent from `a` to `c`
-   - There is no table entry for `a`
+   - There is no table entry for any host, and `c` in particular
  - 5 seconds: frame sent from `c` to `a`
    - There is a table entry for `a`
  - 6 seconds: frame sent from `a` to `c`
    - There is a table entry for `c`
  - 7 seconds: frame sent from `a` to broadcast
-   - Broadcast is always sent to all interfaces on the LAN or VLAN
+   - Broadcast is always sent to all interfaces on the LAN or VLAN (except the interface from which it came)
  - 8 seconds: frame sent from `e` to `a`
-   - Establish a table entry for `a`
+   - Establish a table entry for `e` -- in preparation for future tests
  - 9 seconds: frame sent from `a` to `e`
    - There is a table entry for `e`
  - 10 seconds: frame sent "from" `e` (spoofed from `c`'s port) to `a`
-   - Establish a new table entry for `a`
+   - Update the table entry for `e` -- in preparation for future tests
  - 11 seconds: frame sent from `a` to `e`
-   - There is new a table entry for `e`
+   - The table entry for `e` has been updated
  - 14 seconds: frame sent from `e` to `a`
    - The table entry for `a` has not expired
  - 15 seconds: frame sent from `a` to `c`
