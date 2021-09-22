@@ -228,7 +228,7 @@ following functionality:
    entry exists; if no entry exists, then it is forwarded to every interface,
    except that from which it originated.
  - A broadcast frame (i.e., having destination MAC address `ff:ff:ff:ff:ff:ff`)
-   is forwarded as-is to all interfaces, except that from it originated.
+   is forwarded as-is to all interfaces, except that from which it originated.
 
 Test your implementation against scenarios 1 and 2.  Determine the appropriate
 output--that is, which hosts should receive which frames--and make sure that
