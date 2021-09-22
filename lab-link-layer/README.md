@@ -287,7 +287,7 @@ $ cougarnet --native-apps=none --terminal=none scenario3.cfg
 Your code will need to parse Ethernet frames from the "wire" as a `bytes`
 instances.  The frame that you will be receiving looks like this:
 
-| Source MAC Addr | Destination MAC Addr | EtherType | Payload |
+| Destination MAC Addr | Source MAC Addr | EtherType | Payload |
 | :---: | :---: | :---: | :---: |
 | (48 bits) | (48 bits) | (16 bits) | (variable) |
 
@@ -299,7 +299,7 @@ passed to the application.
 
 In the case of 802.1Q, the frame will look like this:
 
-| Source MAC Addr | Destination MAC Addr | 802.1Q Header | EtherType | Payload |
+| Destination MAC Addr | Source MAC Addr | 802.1Q Header | EtherType | Payload |
 | :---: | :---: | :---: | :---: | :---: |
 | (48 bits) | (48 bits) | (32 bits) | (16 bits) | (variable) |
 
@@ -307,7 +307,6 @@ The most signficant (left-most) 16 bits of the 802.1Q header should have the
 value 0x8100 to indicate that it is an 802.1Q frame.  The least significant
 (right-most) 12 bits of the 802.1Q header should contain the value of the VLAN ID.
 The 4 bits in between can be left as zero.
-
 
 You can index into `bytes` instances (e.g., `foo[0]`), take slices (e.g.,
 `foo[2:4`), and concatenate them together (e.g., `foo + bar`).  I also
