@@ -309,7 +309,7 @@ value 0x8100 to indicate that it is an 802.1Q frame.  The least significant
 The 4 bits in between can be left as zero.
 
 You can index into `bytes` instances (e.g., `foo[0]`), take slices (e.g.,
-`foo[2:4`), and concatenate them together (e.g., `foo + bar`).  I also
+`foo[2:4]`), and concatenate them together (e.g., `foo + bar`).  I also
 recommend checking out the following modules that, together with the `bytes`
 operations, will help you parse, take apart, and put together Ethernet frames:
 `binascii`, `struct`.
