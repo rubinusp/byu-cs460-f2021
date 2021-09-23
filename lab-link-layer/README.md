@@ -47,8 +47,12 @@ Take a look at the contents of `scenario1a.cfg`.  Then run the following to
 start it up:
 
 ```
-$ cougarnet --display scenario1a.cfg
+$ cougarnet --display --disable-ipv6 scenario1a.cfg
 ```
+
+The `--disable-ipv6` option is used on the command line here and throughout the
+remainder of the lab to prevent some noise specific with IPv6 from cluttering up
+our link-layer study.
 
 You will notice that, by default, terminal windows appear for every host and
 for the switch.  You can disable this with the `--terminal=none` option, but
@@ -70,7 +74,7 @@ Now look at the contents of `scenario1.cfg`, and run the following to start it
 up:
 
 ```
-$ cougarnet --display --native-apps=none scenario1.cfg
+$ cougarnet --display --disable-ipv6 --native-apps=none scenario1.cfg
 ```
 
 It is similar in some senses, but very different in some others.  Note the
@@ -237,8 +241,8 @@ the output for your switch implementation matches appropriately.
 When it is working properly, test also with the `--terminal=none` option:
 
 ```
-$ cougarnet --native-apps=none --terminal=none scenario1.cfg
-$ cougarnet --native-apps=none --terminal=none scenario2.cfg
+$ cougarnet --native-apps=none --disable-ipv6 --terminal=none scenario1.cfg
+$ cougarnet --native-apps=none --disable-ipv6 --terminal=none scenario2.cfg
 ```
 
 
@@ -275,9 +279,9 @@ work for those scenarios.
 When it is working properly, test also with the `--terminal=none` option:
 
 ```
-$ cougarnet --native-apps=none --terminal=none scenario1.cfg
-$ cougarnet --native-apps=none --terminal=none scenario2.cfg
-$ cougarnet --native-apps=none --terminal=none scenario3.cfg
+$ cougarnet --native-apps=none --disable-ipv6 --terminal=none scenario1.cfg
+$ cougarnet --native-apps=none --disable-ipv6 --terminal=none scenario2.cfg
+$ cougarnet --native-apps=none --disable-ipv6 --terminal=none scenario3.cfg
 ```
 
 ## Helps
