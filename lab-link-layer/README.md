@@ -61,8 +61,8 @@ first take note of these other things:
  - All terminals, except the one for the switch, display the
    [command that is being run](https://github.com/cdeccio/cougarnet#running-programs)--instead
    of the shell.  This is specified for each host in `scenario1a.cfg`.
- - The calling `cougarnet` process prints out a bunch of log messages.  Most of
-   those are related to activity associated with Open vSwitch, which is
+ - The calling `cougarnet` process prints out a bunch of log messages.
+   You might see some activity from the switch (Open vSwitch), which is
    performing `s1`'s switching operations during this execution (but will not
    be present when your switch is running instead--i.e., with `scenario1.cfg`).
    However, somewhere after the 4-second time, you will see log messages
@@ -80,9 +80,7 @@ $ cougarnet --display --disable-ipv6 --native-apps=none scenario1.cfg
 It is similar in some senses, but very different in some others.  Note the
 following:
 
- - Some frames are still being logged by the host, but they are fewer.
- - After the 4-second time, there is effectively nothing being logged by any of
-   the hosts.
+ - There is effectively nothing being logged by any of the hosts.
  - The switch is printing (to standard output) strange-looking strings.
 
 What is going on?  Well, there is no switch functionality written in
