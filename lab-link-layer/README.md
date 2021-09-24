@@ -328,9 +328,25 @@ Sending and receiving frames is described in the
 
 ### Other Helps
 
- - Use Wireshark to see what is going on!  This is probably most helpful by
-   running `cougarnet` using `--wireshark=s1`.
- - Print to standard out for debugging purposes.  For a script running in a
+ - Because of some complications related to running virtual hosts in their own
+   namespaces, Wireshark is not available to you, except in certain circumstances.
+   However, `tcpdump` is always available.  Try one of the following on a given
+   host to sniff and print out frames:
+   
+   ```
+   $ sudo tcpdump -enlv
+   ```
+   The `-e` option shows Ethernet frame information, and the `-v` option increases
+   verbosity.  The `-n` option tells `tcpdump` to show IP addresses, rather than trying
+   to map them to the corresponding hostnames.  Finally, the `-l` tells `tcpdump` to
+   use line-based buffering.
+   
+   ```
+   $ sudo tcpdump -enlvxX
+   ```
+   The `-x` and `-X` options print out the hexadecimal value of the packet (`-x`),
+   along with the ASCII representation (`-X`).
+- Print to standard out for debugging purposes.  For a script running in a
    virtual host (i.e., with the `prog` option), all output will go to the
    terminal associated with that host, assuming `terminal=false` is not used in
    the configuration file and `--terminal=none` is not used on the command
