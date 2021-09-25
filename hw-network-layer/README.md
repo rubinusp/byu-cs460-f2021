@@ -174,7 +174,7 @@ the switches in the scenario. You can select multiple by holding `ctrl` or
        to `s1`, `s2`, or `s3`) observed that frame (as evidenced by frames
        observed on switch interfaces?  Why?  Note that we haven't hard-coded
        predictable MAC addresses in this configuration, so you will have to get
-       `r1`'s MAC address from the `ip addr` output.
+       `r1`'s MAC address by running `ip addr` on `r1`.
 
     b. Is it seen on any interfaces of `s1`?  Why or why not?
 
