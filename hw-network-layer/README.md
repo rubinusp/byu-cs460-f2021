@@ -180,13 +180,13 @@ the switches in the scenario. You can select multiple by holding `ctrl` or
 
     c. Was the ping successful?
 
- 7. Re-run the `ip neigh` command on `r1` to see the state of its ARP table:
+ 7. Run the `ip neigh` command on `r1` to see the state of its ARP table:
 
     ```bash
     r1$ ip neigh
     ```
 
-    What entries are in the table now?
+    What entries are in its table?
 
 
  8. Follow the instructions from problem 5 to add the appropriate default route
