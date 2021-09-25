@@ -42,7 +42,7 @@ starting all the hosts.  Additionally, `--display-file=net.png` creates an
 image, `net.png`, showing the layout with more network details, including IP
 addresses and interface names.  This image is included here for convenience:
 
-[h6-s2.cfg](h6-r2.png)
+![h6-s2.cfg](h6-r2.png)
 
 The `-w` option tells `cougarnet` to start a
 `wireshark` instance on `s1`--which means that you can sniff packets from any
