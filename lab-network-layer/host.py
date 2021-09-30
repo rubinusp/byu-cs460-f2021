@@ -10,6 +10,7 @@ ETH_P_IP = 0x0800 # Internet Protocol packet
 ETH_P_ARP = 0x0806 # Address Resolution packet
 
 #From /usr/include/net/if_arp.h:
+ARPHRD_ETHER = 1 # Ethernet 10Mbps
 ARPOP_REQUEST = 1 # ARP request
 ARPOP_REPLY = 2 # ARP reply
 
@@ -41,10 +42,9 @@ class Host(BaseFrameHandler):
 
     def send_packet_on_int(self, pkt, intf, next_hop):
         print(f'Attempting to send packet on {intf} with next hop {next_hop}:\n{repr(pkt)}')
-        pass
 
     def send_packet(self, pkt):
-        pass
+        print(f'Attempting to send packet:\n{repr(pkt)}')
 
     def not_my_frame(self, frame, intf):
         pass

@@ -162,7 +162,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
        interface.  This can be found with the `int_to_info` attribute, which is
        documented
        [here](https://github.com/cdeccio/cougarnet/blob/main/README.md#baseframehandler).
-     - Type IP `ETH_P_IP` (`0x0800`)
+     - Type IP (`ETH_P_IP = 0x0800`)
      - The IP packet as the Ethernet payload.
 
      Then it can send that frame by calling the `send_frame()` method (which is
@@ -182,7 +182,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
        - The target MAC address is all zeroes (this field is ignored by the receiver).
        - The MAC address of the incoming interface is used as the sender MAC
          address.
-       - The opcode is `ARPOP_REQUEST = 1`.
+       - The opcode is request (`ARPOP_REQUEST = 1`).
 
      - build and send an Ethernet frame containing the ARP request, consisting
        of:
@@ -190,7 +190,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
          (`ff:ff:ff:ff:ff:ff`)
        - Source MAC address: the MAC address corresponding to the outgoing
          interface.
-       - Type `ETH_P_ARP` (`0x0806`)
+       - Type ARP (`ETH_P_ARP =  0x0806`)
        - The ARP request as the Ethernet payload.
 
      The IP packet will get sent later, when the ARP response is received.
@@ -224,7 +224,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
      - The sender MAC address is used as the target MAC address.
      - The MAC address of the incoming interface is used as the sender MAC
        address.
-     - The opcode is `ARPOP_REPLY = 2`.
+     - The opcode is reply (`ARPOP_REPLY = 2`).
    - build and send an Ethernet frame containing the ARP response, consisting
      of:
      - Destination MAC address: the MAC address of the entity that sent the
@@ -232,7 +232,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
      - Source MAC address: the MAC address corresponding to the interface on
        which the request was received (and which will also the outgoing
        interface).
-     - Type `ETH_P_ARP` (`0x0806`)
+     - Type ARP (`ETH_P_ARP = 0x0806`)
      - The ARP response packet as the Ethernet payload.
 
  - `handle_arp_response()`.  This method takes the same arguments as
@@ -317,13 +317,13 @@ packets, but you may not use them for the lab.
 | 26 |<td colspan="2">Target protocol address (cont'd) (bytes 2 - 3) |
 
 Regarding the fields:
- - Hardware Type will always be `0x0001` (Ethernet)
- - Protocol Type will always be `0x0800` (IPv4)
- - Hardware Address Length will always be `0x06` (MAC addresses are six bytes
+ - Hardware Type will always be Ethernet (`ARPHRD_ETHER = 1`)
+ - Protocol Type will always be IPv4 (`ETH_P_IP = 0x0800`)
+ - Hardware Address Length will always be 6 (MAC addresses are six bytes
    long)
- - Protocol Address Length will always be `0x04` (IPv4 addresses are four bytes
+ - Protocol Address Length will always be 4 (IPv4 addresses are four bytes
    long)
- - Operation (or opcode) will either be 1 (request) or 2 (reply).
+ - Operation (or opcode) will either be request (`ARPOP_REQUEST = 1`) or replay (`ARPOP_REPLY = 2`).
  - While "Hardware" and "Protocol" are the more generic terms for the fields,
    they are referred to in the instructions as "MAC" and "IP" since those are
    the protocols we are working with.
