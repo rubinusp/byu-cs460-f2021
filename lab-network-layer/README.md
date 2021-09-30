@@ -283,15 +283,13 @@ When it is working properly, test also with the `--terminal=none` option:
 $ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 ```
 
-## Helps
-
 
 ## Helps
 
 ### Ethernet Frames
 
 See the documentation for the Link-Layer lab for
-[additional helps for Ethernet frames](#https://github.com/cdeccio/byu-cs460-f2021/blob/master/lab-link-layer/README.md#ethernet-frames).
+[additional helps for Ethernet frames](https://github.com/cdeccio/byu-cs460-f2021/blob/master/lab-link-layer/README.md#ethernet-frames).
 
 Note that there are libraries for parsing Ethernet frames and higher-level
 packets, but you may not use them for the lab.
@@ -301,20 +299,23 @@ packets, but you may not use them for the lab.
 
 | Offset | Byte 0 | Byte 1 |
 | :---: | :---: | :---: |
-| 0 |<td colspan="2"> Hardware Type |
-| 2 |<td colspan="2"> Protocol Type |
+| 0 <td colspan=2> Hardware Type
+| 2 <td colspan=2> Protocol Type
 | 4 | Hardware Address Length | Protocol Address Length |
-| 6 |<td colspan="2">operation |
-| 8 |<td colspan="2">Sender hardware address (bytes 0 - 1) |
-| 10 |<td colspan="2">Sender hardware address (cont'd) (bytes 2 - 3) |
-| 12 |<td colspan="2">Sender hardware address (cont'd) (bytes 4 - 5) |
-| 14 |<td colspan="2">Sender protocol address (bytes 0 - 1) |
-| 16 |<td colspan="2">Sender protocol address (cont'd) (bytes 2 - 3) |
-| 18 |<td colspan="2">Target hardware address (bytes 0 - 1) |
-| 20 |<td colspan="2">Target hardware address (cont'd) (bytes 2 - 3) |
-| 22 |<td colspan="2">Target hardware address (cont'd) (bytes 4 - 5) |
-| 24 |<td colspan="2">Target protocol address (bytes 0 - 1) |
-| 26 |<td colspan="2">Target protocol address (cont'd) (bytes 2 - 3) |
+| 6 <td colspan=2>operation
+| 8 <td colspan=2>Sender hardware address (bytes 0 - 1)
+| 10 <td colspan=2>Sender hardware address (cont'd) (bytes 2 - 3)
+| 12 <td colspan=2>Sender hardware address (cont'd) (bytes 4 - 5)
+| 14 <td colspan=2>Sender protocol address (bytes 0 - 1)
+| 16 <td colspan=2>Sender protocol address (cont'd) (bytes 2 - 3)
+| 18 <td colspan=2>Target hardware address (bytes 0 - 1)
+| 20 <td colspan=2>Target hardware address (cont'd) (bytes 2 - 3)
+| 22 <td colspan=2>Target hardware address (cont'd) (bytes 4 - 5)
+| 24 <td colspan=2>Target protocol address (bytes 0 - 1)
+| 26 <td colspan=2>Target protocol address (cont'd) (bytes 2 - 3)
+
+(if this table doesn't render well, check out the
+[wikipedia page for ARP](https://en.wikipedia.org/wiki/Address_Resolution_Protocol).)
 
 Regarding the fields:
  - Hardware Type will always be Ethernet (`ARPHRD_ETHER = 1`)
