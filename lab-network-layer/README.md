@@ -324,7 +324,7 @@ Regarding the fields:
    long)
  - Protocol Address Length will always be 4 (IPv4 addresses are four bytes
    long)
- - Operation (or opcode) will either be request (`ARPOP_REQUEST = 1`) or replay (`ARPOP_REPLY = 2`).
+ - Operation (or opcode) will either be request (`ARPOP_REQUEST = 1`) or reply (`ARPOP_REPLY = 2`).
  - While "Hardware" and "Protocol" are the more generic terms for the fields,
    they are referred to in the instructions as "MAC" and "IP" since those are
    the protocols we are working with.
