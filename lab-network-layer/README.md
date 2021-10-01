@@ -28,6 +28,9 @@ Cougarnet [here](https://github.com/cdeccio/cougarnet/blob/main/README.md).
 The files given to you for this lab are the following:
  - `host.py` - a file containing a stub implementation of a host (and router).
    This is where you will do your work!
+ - `subnet.py` - a file containing a stub code for IP address comparison and
+   testing whether an IP address is a member of a subnet.  You will also do
+   your work here!
  - `forwarding_table.py` - a file containing a stub implementation of an IP
    forwarding table.  You will also do your work here!
  - `scenario1.cfg`, `scenario2.cfg`, `scenario3.cfg` -
@@ -40,6 +43,9 @@ The files given to you for this lab are the following:
 
 
 # Part 1 - Address Resolution Protocol (ARP)
+
+In this part of the lab, you will develop a working ARP implementation for your
+hosts and routers.
 
 ## Scenario Description
 
@@ -346,6 +352,71 @@ imported in your `host.py`:
    human-readable format and returns a `bytes` instance of the IP address.
 
 # Part 2 - Forwarding Table
+
+In this part of the lab, you will create a working forwarding table for use in
+your hosts and routers.
+
+
+## Getting Started
+
+Take a look at both `subnet.py` and `forwarding_table.py`.  Both have starter
+code that needs to be fleshed out.  But that starter code comes after a lot of
+other stuff at the beginning of the file.  This other stuff is doctests.
+[doctests](https://docs.python.org/3/library/doctest.html), are "pieces
+of text that look like interactive python sessions" (i.e., starting with
+`>>>`), found in the [docstring](https://www.python.org/dev/peps/pep-0257/) of
+a Python file, class, function, or method.  Examine the doctests in both files,
+and the functions or methods to which they correspond.  Then complete the
+following exercises to build a working forwarding table.  Read all exercises
+before you begin, as it might be easier for you to do one before the other.
+
+
+## Instructions
+
+ 1. Fill out the following methods (marked with `FIXME`):
+
+    - `IPAddress.mask()` (approx. 1 - 2 lines of code)
+    - `Subnet.__contains__()` (approx. 1 line of code)
+
+    These methods are short but require a bit of thought.
+
+ 2. Fill in the appropriate return value for each of the doctests for
+    `Subnet.__contains__()` in `subnet.py`.  `None` is currently used as a
+    placeholder for each output, but the return value _should_ be a boolean
+    (`True` or `False`).  You might also choose to create a doctest for
+    `IPAddress.mask()`, to check your work, but it is not required.
+
+    When you have finished your revisions of `subnet.py`:
+
+    - The return values in the doc tests must be correct; and
+    - The following should run without error (and without output):
+    ```
+    python3 -m doctest subnet.py
+    ```
+
+ 3. Fill out the following method (marked with `FIXME`):
+
+    - `ForwardingTable.get_forwarding_entry()` (approx. 10 lines of code)
+      Remember to use longest prefix match for the last method!
+
+ 4. Fill in the appropriate return value for each of the doctests for
+    `ForwardingTable.get_forwarding_entry()` in `forwarding_table.py`.
+    `(None, None)` is currently used as a placeholder for each output, but the
+    return value _should_ be a tuple of type (`str`, `str`), corresponding to
+    outgoing interface name and next hop.
+
+    Note that in the doctest, the next-hop IP address in every entry is
+    currently `None`, so the second value in the tuple returned will also
+    always be `None`.  This is just for testing.  When we apply this to a real
+    host or router, we will give real values for the next-hop IP address.
+
+    When you have finished your revisions of `forwarding_table.py`:
+
+    - The return values in the doc tests must be correct; and
+    - The following should run without error (and without output):
+    ```
+    python3 -m doctest forwarding_table.py
+    ```
 
 # Part 3 - IP Forwarding
 
