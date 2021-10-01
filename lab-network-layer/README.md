@@ -397,6 +397,7 @@ before you begin, as it might be easier for you to do one before the other.
  3. Fill out the following method (marked with `FIXME`):
 
     - `ForwardingTable.get_forwarding_entry()` (approx. 10 lines of code)
+
       Remember to use longest prefix match for the last method!
 
  4. Fill in the appropriate return value for each of the doctests for
