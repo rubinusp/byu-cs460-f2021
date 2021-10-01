@@ -4,6 +4,9 @@ import os
 import socket
 
 from cougarnet.rawpkt import BaseFrameHandler
+from cougarnet.util import \
+        mac_str_to_binary, mac_binary_to_str, \
+        ip_str_to_binary, ip_binary_to_str
 
 #From /usr/include/linux/if_ether.h:
 ETH_P_IP = 0x0800 # Internet Protocol packet
