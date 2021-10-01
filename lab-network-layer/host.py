@@ -14,9 +14,6 @@ ARPHRD_ETHER = 1 # Ethernet 10Mbps
 ARPOP_REQUEST = 1 # ARP request
 ARPOP_REPLY = 2 # ARP reply
 
-ETH_P_IP = 0x0800 # Internet Protocol packet
-ETH_P_ARP = 0x0806 # Address Resolution packet
-
 class Host(BaseFrameHandler):
     def __init__(self, ip_forward):
         super(Host, self).__init__()
