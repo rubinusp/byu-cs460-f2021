@@ -140,7 +140,7 @@ the switches in the scenario. You can select multiple by holding `ctrl` or
     a. Is it successful?
 
     b. On what interfaces of `s1` and `s2` is the corresponding packet/frame
-       seen?
+       seen, if any?
 
  5. Let's now add an entry to `a`'s forwarding table.  The general formula is
     this:
