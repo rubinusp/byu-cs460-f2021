@@ -223,4 +223,4 @@ the switches in the scenario. You can select multiple by holding `ctrl` or
         c$ ping -c 1 -W 1 10.0.3.2
         ```
 
-        Hint: the should both work.
+        Hint: they should both work.
