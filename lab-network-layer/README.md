@@ -329,6 +329,21 @@ Regarding the fields:
    they are referred to in the instructions as "MAC" and "IP" since those are
    the protocols we are working with.
 
+### Address Representation Conversion
+
+To help you with converting MAC addresses and IP addresses from presentation
+(i.e., human readable) format to binary (i.e., machine/network readable)
+format and vice-versa, I have created four functions for you, which are already
+imported in your `host.py`:
+
+ - `mac_binary_to_str()` - takes a `bytes` instance of a MAC address and
+   returns a `str` instance with the MAC address in human-readable format.
+ - `mac_str_to_binary()` - takes a `str` instance of a MAC address in
+   human-readable format and returns a `bytes` instance of the MAC address.
+ - `ip_binary_to_str()` - takes a `bytes` instance of an IP address and
+   returns a `str` instance with the IP address in human-readable format.
+ - `ip_str_to_binary()` - takes a `str` instance of an IP address in
+   human-readable format and returns a `bytes` instance of the IP address.
 
 # Part 2 - Forwarding Table
 
