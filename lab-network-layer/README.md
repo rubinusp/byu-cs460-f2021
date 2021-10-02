@@ -625,7 +625,7 @@ $ cougarnet --disable-ipv6 --terminal=none scenario2.cfg
 ### IPv4 Packets
 
 Your code will need to parse IPv4 packets, both as received from the "wire" and
-as passed by a method (e.g., `send_packet()`--in both cases as `bytes`
+as passed by a method (e.g., `send_packet()`)--in both cases as `bytes`
 instances.  The packet that you will be receiving looks like this:
 
 ![IPv4 Datagram](ipv4-header-white.png)
