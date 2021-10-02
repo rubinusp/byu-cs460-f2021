@@ -628,7 +628,8 @@ Your code will need to parse IPv4 packets, both as received from the "wire" and
 as passed by a method (e.g., `send_packet()`--in both cases as `bytes`
 instances.  The packet that you will be receiving looks like this:
 
-!(IPv4 Header)[ipv4-header.png]
+![IPv4 Datagram](ipv4-header.png)
+
 (Taken from the
 [wikipedia page for IPv4](https://en.wikipedia.org/wiki/IPv4)
 
