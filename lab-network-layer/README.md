@@ -107,7 +107,7 @@ it would do.  What is missing at this point is:
 When these things are added, you will be able to send IP packets across a local
 area network (LAN), as long as you know the outgoing interface and the next-hop
 IP address.  We will learn how to determine outgoing interface and next-hop in
-the [Part 3](#part-3-ip-forwarding).
+the [Part 3](#part-3---ip-forwarding).
 
 
 ## Frames Issued
@@ -470,7 +470,7 @@ it would do.  What is missing at this point is:
    destination.
 
 These will be addressed by initializing the forwarding table you built in
-[Part 2](#part-2-forwarding-table), looking up outgoing interface and next hop
+[Part 2](#part-2---forwarding-table), looking up outgoing interface and next hop
 in the forwarding table, and actually forwarding packets.  When these things
 are added, you will be able to send IP packets from host to host, across
 routers and multiple LANs.
