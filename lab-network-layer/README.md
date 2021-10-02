@@ -9,7 +9,7 @@ and a router!
  - [Getting Started](#getting-started)
    - [Update Cougarnet](#update-cougarnet)
    - [Resources Provided](#resources-provided)
- - [Part 1 - Address Resolution Protocol (#ARP)](part-1---address-resolution-protocol-arp)
+ - [Part 1 - Address Resolution Protocol (#ARP)](#part-1---address-resolution-protocol-arp)
    - [Scenario Description](#scenario-description)
    - [Starter Commands](#starter-commands)
    - [Frames Issued](#frames-issued)
