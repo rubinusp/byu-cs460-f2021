@@ -22,7 +22,7 @@ and a router!
  - [Part 3 - IP Forwarding](#part-3---ip-forwarding)
    - [Scenario Description](#scenario-description-1)
    - [Starter Commands](#starter-commands-1)
-   - [Frames Issued](#frames-issued-1)
+   - [Packets Issued](#packets-issued)
    - [Instructions](#instructions-2)
    - [Testing](#testing-1)
    - [Helps](#helps-1)
@@ -500,7 +500,7 @@ are added, you will be able to send IP packets from host to host, across
 routers and multiple LANs.
 
 
-## Frames Issued
+## Packets Issued
 
 With `scenario2.cfg`, `send_packet()` is called for the following packets at
 the following times (note that times are approximate).  Refer to the
@@ -665,7 +665,7 @@ See the help on
 above.
 
 
-# Other Helps
+# General Helps
 
  - Print to standard out for debugging purposes.  For a script running in a
    virtual host (i.e., with the `prog` option), all output will go to the
