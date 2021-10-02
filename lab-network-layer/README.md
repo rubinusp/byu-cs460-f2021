@@ -107,7 +107,7 @@ it would do.  What is missing at this point is:
 When these things are added, you will be able to send IP packets across a local
 area network (LAN), as long as you know the outgoing interface and the next-hop
 IP address.  We will learn how to determine outgoing interface and next-hop in
-the next part.
+the [Part 3](#ip-forwarding).
 
 
 ## Frames Issued
