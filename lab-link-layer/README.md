@@ -346,7 +346,7 @@ Sending and receiving frames is described in the
    ```
    The `-x` and `-X` options print out the hexadecimal value of the packet (`-x`),
    along with the ASCII representation (`-X`).
-- Print to standard out for debugging purposes.  For a script running in a
+ - Print to standard out for debugging purposes.  For a script running in a
    virtual host (i.e., with the `prog` option), all output will go to the
    terminal associated with that host, assuming `terminal=false` is not used in
    the configuration file and `--terminal=none` is not used on the command
