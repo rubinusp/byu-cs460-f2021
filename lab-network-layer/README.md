@@ -5,6 +5,30 @@ network layer and how it interacts with the link layer.  To accomplish this,
 you will implement the Address Resolution Protocol (ARP), forwarding tables,
 and a router!
 
+# Table of Contents
+ - [Getting Started](#getting-started)
+   - [Update Cougarnet](#update-cougarnet)
+   - [Resources Provided](#resources-provided)
+ - [Part 1 - Address Resolution Protocol (#ARP)](part-1---address-resolution-protocol-arp)
+   - [Scenario Description](#scenario-description)
+   - [Starter Commands](#starter-commands)
+   - [Frames Issued](#frames-issued)
+   - [Instructions](#instructions)
+   - [Testing](#testing)
+   - [Helps](#helps)
+ - [Part 2 - Forwarding Table](#part-2---forwarding-table)
+   - [Getting Started](#getting-started-1)
+   - [Instructions](#instructions-1)
+ - [Part 3 - IP Forwarding](#part-3---ip-forwarding)
+   - [Scenario Description](#scenario-description-1)
+   - [Starter Commands](#starter-commands-1)
+   - [Frames Issued](#frames-issued-1)
+   - [Instructions](#instructions-2)
+   - [Testing](#testing-1)
+   - [Helps](#helps-1)
+ - [General Helps](#general-helps)
+ - [Submission](#submission)
+
 
 # Getting Started
 
