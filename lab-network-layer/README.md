@@ -33,11 +33,11 @@ The files given to you for this lab are the following:
    your work here!
  - `forwarding_table.py` - a file containing a stub implementation of an IP
    forwarding table.  You will also do your work here!
- - `scenario1.cfg`, `scenario2.cfg`, `scenario3.cfg` -
+ - `scenario1.cfg` and `scenario2.cfg` -
    [network configuration files](https://github.com/cdeccio/cougarnet/blob/main/README.md#network-configuration-file)
    describing three topologies for testing different aspects of functionality
    related to this lab.
- - `scenario1.py`, `scenario2.py`, `scenario3.py` -
+ - `scenario1.py` and `scenario2.py` -
    scripts that run various tests in conjunction with the network configuration
    files.
 
@@ -80,7 +80,7 @@ switch `s2`.  The topology looks like this:
           +----+
 ```
 
-The switch is a working switch; you do not have to implement its functionality!  
+The switch is a working switch; you do not have to implement its functionality!
 Your focus is on the host/router functionality.
 
 
@@ -142,7 +142,7 @@ listed.
 
 In the file `host.py`, flesh out following the skeleton methods related to ARP:
 
- - `send_packet_on_int()`.  This method takes the following as as arguments:
+ - `send_packet_on_int()`.  This method takes the following as arguments:
 
    - `pkt`: an IP packet, complete with IP header.  Generally, this could be
      either an IPv4 or an IPv6 packet, but for the purposes of this lab, it
@@ -152,7 +152,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
    - `next_hop`: the IP address of the next hop for to the packet, which is
      either the IP destination, if on the same subnet as the host, or the IP
      address of a router.
-   
+
    The method should do the following:
 
    - Find the MAC address corresponding to `next_hop`, the next-hop IP address.
@@ -201,7 +201,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
 
      The IP packet will get sent later, when the ARP response is received.
 
- - `handle_arp()`.  This method takes the following as as arguments:
+ - `handle_arp()`.  This method takes the following as arguments:
 
    - `pkt` - the ARP packet received
    - `intf` - the interface on which it was received
@@ -253,7 +253,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
      i.e., those whose next hop corresponds to the sender IP address in the
      response. Send all the packets.
 
- - `_handle_frame()`.  This method takes the following as as arguments:
+ - `_handle_frame()`.  This method takes the following as arguments:
 
    - `frame` - the Ethernet frame received
    - `intf` - the interface on which it was received
@@ -271,7 +271,8 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
        passing the Ethernet payload and the interface on which it arrived.
      - For all other types, take no further action.
    - If the destination address does not match or is not the Ethernet
-     broadcast, then call `not_my_frame()`.
+     broadcast, then call `not_my_frame()`, passing it the full frame and the
+     interface on which it arrived.
 
  - `not_my_frame()`.  There is no need to flesh out this method.  It is simply
    a placeholder for debugging.
@@ -302,6 +303,10 @@ packets, but you may not use them for the lab.
 
 
 ### ARP Packets
+
+Your code will need to both create ARP packets for sending and parse ARP
+packets that have been received on the "wire".  ARP packets have the following
+format:
 
 | Offset | Byte 0 | Byte 1 |
 | :---: | :---: | :---: |
@@ -421,4 +426,246 @@ before you begin, as it might be easier for you to do one before the other.
 
 # Part 3 - IP Forwarding
 
+In this part of the lab, you will develop a working router implementation to
+apply to your hosts and routers.
+
+
+## Scenario Description
+
+The file `scenario2.cfg` describes a network topology.  Hosts `a` and `b` are
+connected to router `r1` via switch `s1`.  Hosts `c` through `k` are directly
+connected to router `r1` on different interfaces.  Thus, `a` and `b` are on the
+same LAN, together with `r1`'s `r1-s1` interface.  Hosts `c` through `k` are
+each on their own LAN, shared only by the `r1` interface to which they are
+connected.  Finally, hosts `l` and `m` are connected to router `r2` through
+switch `s2`, and routers `r1` and `r2` are directly connected.
+
+![scenario2.cfg](scenario2.png)
+
+Again, the switches are already working; you do not have to implement switch
+functionality.  Your focus is on the host/router functionality.
+
+
+## Starter Commands
+
+Take a look at the contents of `scenario2.cfg`.  Then run the following to
+start it up:
+
+```
+$ cougarnet --disable-ipv6 scenario2.cfg
+```
+
+After a few seconds of awkward silence, you will see output on the terminal
+corresponding to Host `a`.  The output is made by placeholder code in
+`host.py`.  Instead of sending packets, it simply prints out that that's what
+it would do.  What is missing at this point is:
+
+ - logic to determine both
+   - the interface out which the packet should be sent and
+   - the contents (source and destination MAC address) of the Ethernet frame
+     header that should encapsulate it;
+ - some logic to determine which packets should be acted upon;
+ - code to handle packets for which the receiving host is the final destination;
+ - code to handle packets for which the receiving host is not the final
+   destination.
+
+These will be addressed by initializing the forwarding table you built in
+[Part 2](#part-2-forwarding-table), looking up outgoing interface and next hop
+in the forwarding table, and actually forwarding packets.  When these things
+are added, you will be able to send IP packets from host to host, across
+routers and multiple LANs.
+
+
+## Frames Issued
+
+With `scenario2.cfg`, `send_packet()` is called for the following packets at
+the following times (note that times are approximate).  Refer to the
+[network diagram above](#scenario-description-1) to help identify their route.
+Each sub-bullet describes the purpose of the primary bullet under which it is
+listed.
+
+ - 4 seconds: packet sent from `a` to `b`.
+   - `a` uses the IP destination as the next hop
+
+ The next set of packets correspond to the tests in
+ `forwarding_table.py` (see [Part 2](#part-2-forwarding-table), so if your
+ doctests work, then these should work.
+
+ - 5 seconds: packet sent from `a` to `10.20.0.25`
+ - 6 seconds: packet sent from `a` to `10.20.0.34`
+ - 7 seconds: packet sent from `a` to `10.20.1.20`
+ - 8 seconds: packet sent from `a` to `10.20.3.1`
+ - 9 seconds: packet sent from `a` to `10.20.0.2`
+ - 10 seconds: packet sent from `a` to `10.20.0.11`
+ - 12 seconds: packet sent from `a` to `10.20.0.150`
+ - 13 seconds: packet sent from `a` to `10.20.0.7`
+ - 14 seconds: packet sent from `a` to `10.20.0.75`
+
+ Finally:
+
+ - 15 seconds: packet sent from `a` to `l`
+   - A packet can be sent across several routers
+ - 16 seconds: packet sent from `a` to `l` with TTL=1
+   - A router drops packets whose TTL is 0 after decrementing
+
+## Instructions
+
+In the file `host.py`, flesh out following the skeleton methods related to IP
+forwarding:
+
+ - `__init__()`
+
+   - Initialize the forwarding table (i.e., the one you created in Part 2)
+     using two sources:
+
+     - The entries from the `scenario2.cfg` configuration file, provided in the
+       `COUGARNET_ROUTES` environment variable.  See the
+       [documentation](https://github.com/cdeccio/cougarnet/blob/main/README.md#routes)
+       for more on how to do this.  Each entry provided is a three-tuple
+       consisting of prefix, outgoing interface, and next hop.
+
+     - The IP prefixes with which each interface is associated.  The prefix for
+       each interface can be found in the `int_to_info`
+       [attribute](https://github.com/cdeccio/cougarnet/blob/main/README.md#baseframehandler)
+       of the host.  For each interface, the added entry should
+       consist of the IP prefix for the interface, the interface itself as the
+       outgoing interface, and a next hop of `None`.
+
+ - `send_packet()`.  This method takes the following as an argument:
+
+   - `pkt`: an IP packet, complete with IP header.  Generally, this could be
+     either an IPv4 or an IPv6 packet, but for the purposes of this lab, it
+     will just be IPv4.
+
+   The method should do the following:
+
+   - Parse the IP datagram (the IP header) to extract the destination IP
+     address.
+
+   - Find the matching entry in the host's forwarding table.  This yields a
+     two-tuple corresponding to an outgoing interface and next hop.
+
+   - If the next hop returned from the forwarding table lookup is `None`, then
+     use the destination IP address as the next hop.  This is the case for
+     subnets to which the host is directly connected--i.e., the ones populated
+     from the directly connected prefixes above.
+
+   - Call `send_packet_on_int()`, passing as arguments the IP datagram (`pkt`),
+     the outgoing interface, and the next hop.
+
+ - `handle_ip()`.  This method takes the following as arguments:
+
+   - `pkt` - the IP packet received
+   - `intf` - the interface on which it was received
+
+   This method is called by `_handle_frame()` when an IP frame is received, and
+   the type field of the Ethernet frame header indicates that the Ethernet payload
+   is an IPv4 packet (i.e., its `type` is `ETH_P_IP`).
+
+   The method should do the following:
+
+   - Parse out the destination IP address in the packet.
+   - If the destination IP address matches _any_ of the IP addresses on
+     the host (i.e., not limited to the IP address on the incoming interface),
+     or if the destination IP address is the broadcast IP address
+     (`255.255.255.255`), then call another method to handle the payload,
+     depending on the protocol value in the IP header:
+     - For type TCP (`IPPROTO_TCP = 6`), extract the payload and call
+       `handle_tcp()`, passing the full IP datagram, including header.
+     - For type UDP (`IPPROTO_UDP = 17`), extract the payload and call
+       `handle_udp()`, passing the full IP datagram, including header.
+   - If the destination IP address does not match any IP address on the system,
+     and it is not the IP broadcast, then call `not_my_packet()`, passing it
+     the full IP datagram and the interface on which it arrived.
+
+ - `forward_packet()`. This method takes the following as an argument:
+
+   - `pkt` - the IP packet received
+
+   The method should do the following:
+
+   - Parse the IP datagram (the IP header) to extract the time-to-live (TTL)
+     value.  This value represents the number of remaining "hops" (i.e.,
+     routers) though which the packet can pass.
+   - Decrement the TTL value by 1.  If the resulting value is 0, then simply
+     return.  Expired packets should not be forwarded.
+   - Replace the TTL in the IP datagram with the decremented value.
+   - Call `send_packet()` on the modified packet.
+
+ - `not_my_packet()`. This method takes the following as arguments:
+
+   - `pkt` - the IP packet received
+   - `intf` - the interface on which it was received
+
+   The method should do the following:
+
+   - If the value of the `_ip_forward` instance member is `False`, then there
+     is no need to go any further!  Simply return.  Otherwise (`True`),
+     call `forward_packet()`.
+
+ - `handle_tcp()`, `handle_udp()`.  There is no need to
+   flesh out these methods.  They are simply placeholders for debugging.
+
+
+## Testing
+
+Test your implementation against scenario 2.  Determine the appropriate
+output--that is, which hosts should receive which packets--and make sure that
+the cougarnet output matches appropriately.
+
+When it is working properly, test also with the `--terminal=none` option:
+
+```
+$ cougarnet --disable-ipv6 --terminal=none scenario2.cfg
+```
+
+
+## Helps
+
+### IPv4 Packets
+
+Your code will need to parse IPv4 packets, both as received from the "wire" and
+as passed by a method (e.g., `send_packet()`--in both cases as `bytes`
+instances.  The packet that you will be receiving looks like this:
+
+!(IPv4 Header)[ipv4-header.png]
+(Taken from the
+[wikipedia page for IPv4](https://en.wikipedia.org/wiki/IPv4)
+
+
+### Address Representation Conversion
+
+See the help on
+[Address Representation Conversion](#address-representation-conversion) above.
+above.
+
+
+# Other Helps
+
+ - Print to standard out for debugging purposes.  For a script running in a
+   virtual host (i.e., with the `prog` option), all output will go to the
+   terminal associated with that host, assuming `terminal=false` is not used in
+   the configuration file and `--terminal=none` is not used on the command
+   line.  See
+   [the documentation](https://github.com/cdeccio/cougarnet/blob/main/README.md#additional-options).
+   for more.
+ - You can modify `scenario1.py`, `scenario2.py`, and the corresponding
+   configuration files all you want for testing and for experimentation.  If
+   this helps you, please do it!  Just note that your submission will be graded
+   using only your `host.py`, `subnet.py`, and `forwarding_table.py`. The other
+   files used will be the stock files [you were provided](#resources-provided).
+ - Save your work often, especially after you move from part to part.  Part 2.
+   You are welcome (and encouraged) to use a version control repository, such
+   as GitHub.  However, please ensure that it is a private repository!
+
+
 # Submission
+
+Use the following commands to create a directory, place your working files in
+it, and tar it up:
+
+```
+$ mkdir network-lab
+$ cp host.py subnet.py forwarding_table.py network-lab
+$ tar -zcvf network-lab.tar.gz network-lab
+```

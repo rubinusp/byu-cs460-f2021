@@ -17,6 +17,10 @@ ARPHRD_ETHER = 1 # Ethernet 10Mbps
 ARPOP_REQUEST = 1 # ARP request
 ARPOP_REPLY = 2 # ARP reply
 
+#From /usr/include/linux/in.h:
+IPPROTO_TCP = 6 # Transmission Control Protocol
+IPPROTO_UDP = 17 # User Datagram Protocol
+
 class Host(BaseFrameHandler):
     def __init__(self, ip_forward):
         super(Host, self).__init__()
@@ -29,6 +33,12 @@ class Host(BaseFrameHandler):
         pass
 
     def handle_ip(self, pkt, intf):
+        pass
+
+    def handle_tcp(self, pkt):
+        pass
+
+    def handle_udp(self, pkt):
         pass
 
     def handle_arp(self, pkt, intf):
@@ -45,6 +55,9 @@ class Host(BaseFrameHandler):
 
     def send_packet(self, pkt):
         print(f'Attempting to send packet:\n{repr(pkt)}')
+
+    def forward_packet(self, pkt):
+        pass
 
     def not_my_frame(self, frame, intf):
         pass
