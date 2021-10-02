@@ -177,7 +177,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
      If no mapping exists, then it does the following:
 
      - queue the packet, along with interface and next hop, for later sending
-     - create an ARP request, such that:
+     - create an [ARP request](#arp-packets), such that:
        - The sender IP address is the IP address associated with the outgoing
 	 interface.  This can be found with the `int_to_info`
          [attribute](https://github.com/cdeccio/cougarnet/blob/main/README.md#baseframehandler)
