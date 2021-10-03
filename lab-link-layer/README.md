@@ -4,6 +4,19 @@ The objective of this assignment is to give you hands-on experience with the
 link layer, local area networks (LANs), switching, and virtual LANs (VLANs), by
 implementing a link-layer switch!
 
+# Table of Contents
+
+ - [Getting Started](#getting-started)
+   - [Update Cougarnet](#update-cougarnet)
+   - [Resources Provided](#resources-provided)
+   - [Starter Commands](#starter-commands)
+   - [Scenario Descriptions](#scenario-descriptions)
+   - [Frames Issued](#frames-issued)
+ - [Instructions](#instructions)
+   - [Part 1 - Link-Layer Forwarding and Learning](#part-1---link-layer-forwarding-and-learning)
+   - [Part 2 - VLANs and Trunking](#part-2---vlans-and-trunking)
+   - [Helps](#helps)
+ - [Submission](#submission)
 
 # Getting Started
 
