@@ -555,6 +555,12 @@ forwarding:
        consist of the IP prefix for the interface, the interface itself as the
        outgoing interface, and a next hop of `None`.
 
+     In both cases, it will probably be helpful to use the docstrings from
+     `forwarding_table.py` as a guide for adding entries.  They show you how to
+     form an `IPAddress` instance from a `str`, how to instantiate a `Subnet`
+     (prefix) instance from an `IPAddress` instance, and how to add a
+     `ForwardingTable` entry using a `Subnet` instance and prefix length (`int`).
+
  - `send_packet()`.  This method takes the following as an argument:
 
    - `pkt`: an IP packet, complete with IP header.  Generally, this could be
