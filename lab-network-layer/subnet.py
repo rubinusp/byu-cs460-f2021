@@ -120,7 +120,7 @@ class IPAddress(object):
         prefix_len: int
         '''
         #FIXME
-        pass
+        return 0
 
 class Subnet(object):
     def __init__(self, prefix, prefix_len=None):
@@ -145,7 +145,7 @@ class Subnet(object):
         #
         # For now, convert it to a true prefix.
         self.prefix = IPAddress( \
-                self.prefix.address & self.prefix.mask(self.prefix_len)
+                self.prefix.address & self.prefix.mask(self.prefix_len), \
                 self.prefix.address_family)
 
     def __repr__(self):
