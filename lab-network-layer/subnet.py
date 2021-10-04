@@ -1,42 +1,42 @@
 '''
 Test the Subnet.__contains__() method
->>> IPAddress('10.20.0.1') in Subnet(IPAddress('10.20.0.0'), 23)
+>>> '10.20.0.1' in Subnet('10.20.0.0/23')
 None
->>> IPAddress('10.20.1.0') in Subnet(IPAddress('10.20.0.0'), 23)
+>>> '10.20.1.0' in Subnet('10.20.0.0/23')
 None
->>> IPAddress('10.20.1.255') in Subnet(IPAddress('10.20.0.0'), 23)
+>>> '10.20.1.255' in Subnet('10.20.0.0/23')
 None
->>> IPAddress('10.20.2.0') in Subnet(IPAddress('10.20.0.0'), 23)
+>>> '10.20.2.0' in Subnet('10.20.0.0/23')
 None
->>> IPAddress('10.20.0.1') in Subnet(IPAddress('10.20.0.0'), 24)
+>>> '10.20.0.1' in Subnet('10.20.0.0/24')
 None
->>> IPAddress('10.20.0.255') in Subnet(IPAddress('10.20.0.0'), 24)
+>>> '10.20.0.255' in Subnet('10.20.0.0/24')
 None
->>> IPAddress('10.20.1.0') in Subnet(IPAddress('10.20.0.0'), 24)
+>>> '10.20.1.0' in Subnet('10.20.0.0/24')
 None
->>> IPAddress('10.20.0.1') in Subnet(IPAddress('10.20.0.0'), 25)
+>>> '10.20.0.1' in Subnet('10.20.0.0/25')
 None
->>> IPAddress('10.20.0.127') in Subnet(IPAddress('10.20.0.0'), 25)
+>>> '10.20.0.127' in Subnet('10.20.0.0/25')
 None
->>> IPAddress('10.20.0.128') in Subnet(IPAddress('10.20.0.0'), 25)
+>>> '10.20.0.128' in Subnet('10.20.0.0/25')
 None
->>> IPAddress('10.20.0.1') in Subnet(IPAddress('10.20.0.0'), 26)
+>>> '10.20.0.1' in Subnet('10.20.0.0/26')
 None
->>> IPAddress('10.20.0.63') in Subnet(IPAddress('10.20.0.0'), 26)
+>>> '10.20.0.63' in Subnet('10.20.0.0/26')
 None
->>> IPAddress('10.20.0.64') in Subnet(IPAddress('10.20.0.0'), 26)
+>>> '10.20.0.64' in Subnet('10.20.0.0/26')
 None
->>> IPAddress('10.20.0.1') in Subnet(IPAddress('10.20.0.0'), 27)
+>>> '10.20.0.1' in Subnet('10.20.0.0/27')
 None
->>> IPAddress('10.20.0.31') in Subnet(IPAddress('10.20.0.0'), 27)
+>>> '10.20.0.31' in Subnet('10.20.0.0/27')
 None
->>> IPAddress('10.20.0.32') in Subnet(IPAddress('10.20.0.0'), 27)
+>>> '10.20.0.32' in Subnet('10.20.0.0/27')
 None
->>> IPAddress('2001:db8:f00d::1') in Subnet(IPAddress('2001:db8::'), 32)
+>>> '2001:db8:f00d::1' in Subnet('2001:db8::/32')
 None
->>> IPAddress('2001:db8:f00d::1') in Subnet(IPAddress('2001:db8::'), 64)
+>>> '2001:db8:f00d::1' in Subnet('2001:db8::/64')
 None
->>> IPAddress('2001:db8::feed:1') in Subnet(IPAddress('2001:db8::'), 96)
+>>> '2001:db8::feed:1' in Subnet('2001:db8::/96')
 None
 '''
 
@@ -111,20 +111,42 @@ class IPAddress(object):
         return IPAddress(self.address - other, self.address_family)
 
     def mask(self, prefix_len):
-        '''Return the mask for the given prefix length, as an integer.
+        '''
+        Return the mask for the given prefix length, as an integer.
         Specifically, the mask should be an integer in which the most
         significant prefix_len bits are 1 and the least significant
-        (self.address_len - prefix_len) bits are 0.'''
+        (self.address_len - prefix_len) bits are 0.
+
+        prefix_len: int
+        '''
         #FIXME
         pass
 
-    def subnet(self, prefix_len):
-        return Subnet(IPAddress(self.prefix(prefix_len), self.address_family), prefix_len)
-
 class Subnet(object):
-    def __init__(self, prefix, prefix_len):
-        self.prefix = prefix
-        self.prefix_len = prefix_len
+    def __init__(self, prefix, prefix_len=None):
+        '''
+        Instantiate a Subnet from a prefix.
+
+        prefix: str or IPAddress instance
+        prefix_len: int (only used if prefix is IPAddress instance)
+        '''
+        if isinstance(prefix, str):
+            ip, prefix_len = prefix.split('/')
+            ip = IPAddress(ip)
+            self.prefix_len = int(prefix_len)
+            self.prefix = ip
+        else: # prefix is instance of IPAddress
+            assert prefix_len is not None
+            self.prefix = prefix
+            self.prefix_len = prefix_len
+
+        # TODO make something to check that the prefix is a true prefix (i.e.,
+        # no host bits), not just an IP address that we convert to a prefix.
+        #
+        # For now, convert it to a true prefix.
+        self.prefix = IPAddress( \
+                self.prefix.address & self.prefix.mask(self.prefix_len)
+                self.prefix.address_family)
 
     def __repr__(self):
         return str(self)
@@ -133,8 +155,16 @@ class Subnet(object):
         return '%s/%d' % (self.prefix, self.prefix_len)
 
     def __contains__(self, ip):
-        '''Return True if the address corresponding to this IP instance is
-        within this subnet, False otherwise.'''
+        '''
+        Return True if the address corresponding to this IP address is within
+        this subnet, False otherwise.
+
+        ip: str or IPAddress instance
+        '''
+
+        if isinstance(ip, str):
+            ip = IPAddress(ip)
+
         #FIXME
         return None
 
@@ -143,23 +173,3 @@ class Subnet(object):
 
     def __eq__(self, other):
         return self.prefix == other.prefix and self.prefix_len == other.prefix_len
-
-class ForwardingTable(object):
-    def __init__(self):
-        self.entries = {}
-
-    def add_entry(self, prefix, intf, next_hop):
-        self.entries[prefix] = (intf, next_hop)
-
-    def remove_entry(self, subnet):
-        if subnet in self.entries:
-            del self.entries[subnet]
-
-    def get_entry(self, ip_address):
-        '''
-        Return the subnet entry having the longest prefix match of ip_address.
-        The entry is a tuple consisting of interface and next-hop IP address.
-        If there is no match, return None, None.
-        '''
-        #FIXME
-        return None, None

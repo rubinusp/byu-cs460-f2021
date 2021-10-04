@@ -1,47 +1,66 @@
 '''
 >>> from subnet import IPAddress, Subnet
 >>> table = ForwardingTable()
->>> table.add_entry(Subnet(IPAddress('10.20.0.0'), 23), 'r1-c', None)
->>> table.add_entry(Subnet(IPAddress('10.20.0.0'), 24), 'r1-d', None)
->>> table.add_entry(Subnet(IPAddress('10.20.0.0'), 25), 'r1-e', None)
->>> table.add_entry(Subnet(IPAddress('10.20.0.0'), 26), 'r1-f', None)
->>> table.add_entry(Subnet(IPAddress('10.20.0.0'), 27), 'r1-g', None)
->>> table.add_entry(Subnet(IPAddress('10.20.0.0'), 28), 'r1-h', None)
->>> table.add_entry(Subnet(IPAddress('10.20.0.0'), 29), 'r1-i', None)
->>> table.add_entry(Subnet(IPAddress('10.20.0.0'), 30), 'r1-j', None)
->>> table.add_entry(Subnet(IPAddress('0.0.0.0'), 0), 'r1-k', None)
+>>> table.add_entry('10.20.0.0/23', 'r1-c', '10.30.0.2')
+>>> table.add_entry('10.20.0.0/24', 'r1-d', '10.30.0.6')
+>>> table.add_entry('10.20.0.0/25', 'r1-e', '10.30.0.10')
+>>> table.add_entry('10.20.0.0/26', 'r1-f', '10.30.0.14')
+>>> table.add_entry('10.20.0.0/27', 'r1-g', '10.30.0.18')
+>>> table.add_entry('10.20.0.0/28', 'r1-h', '10.30.0.22')
+>>> table.add_entry('10.20.0.0/29', 'r1-i', '10.30.0.26')
+>>> table.add_entry('10.20.0.0/30', 'r1-j', '10.30.0.30')
+>>> table.add_entry('0.0.0.0/0', 'r1-k', '10.30.0.34')
 
 Test the ForwardingTable.get_entry() method
->>> table.get_entry(IPAddress('10.20.0.25'))
+>>> table.get_entry('10.20.0.25')
 (None, None)
->>> table.get_entry(IPAddress('10.20.0.34'))
+>>> table.get_entry('10.20.0.34')
 (None, None)
->>> table.get_entry(IPAddress('10.20.1.20'))
+>>> table.get_entry('10.20.1.20')
 (None, None)
->>> table.get_entry(IPAddress('10.20.3.1'))
+>>> table.get_entry('10.20.3.1')
 (None, None)
->>> table.get_entry(IPAddress('10.20.0.2'))
+>>> table.get_entry('10.20.0.2')
 (None, None)
->>> table.get_entry(IPAddress('10.20.0.11'))
+>>> table.get_entry('10.20.0.11')
 (None, None)
->>> table.get_entry(IPAddress('10.20.0.150'))
+>>> table.get_entry('10.20.0.150')
 (None, None)
->>> table.get_entry(IPAddress('10.20.0.7'))
+>>> table.get_entry('10.20.0.7')
 (None, None)
->>> table.get_entry(IPAddress('10.20.0.75'))
+>>> table.get_entry('10.20.0.75')
 (None, None)
 '''
 
-from subnet import IPAddress
+from subnet import IPAddress, Subnet
 
 class ForwardingTable(object):
     def __init__(self):
         self.entries = {}
 
     def add_entry(self, prefix, intf, next_hop):
+        '''
+        Add forwarding entry mapping prefix to interface and next hop IP
+        address.
+
+        prefix: str or Subnet instance
+        '''
+
+        if isinstance(prefix, str):
+            prefix = Subnet(prefix)
+
         self.entries[prefix] = (intf, next_hop)
 
-    def remove_entry(self, subnet):
+    def remove_entry(self, prefix):
+        '''
+        Remove the forwarding entry matching prefix.
+
+        prefix: str or Subnet instance
+        '''
+
+        if isinstance(prefix, str):
+            prefix = Subnet(prefix)
+
         if subnet in self.entries:
             del self.entries[subnet]
 
@@ -50,7 +69,10 @@ class ForwardingTable(object):
         Return the subnet entry having the longest prefix match of ip_address.
         The entry is a tuple consisting of interface and next-hop IP address.
         If there is no match, return None, None.
+
+        ip_address: str or IPAddress instance
         '''
+
         if isinstance(ip_address, str):
             ip_address = IPAddress(ip_address)
         
