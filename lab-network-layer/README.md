@@ -9,7 +9,7 @@ and a router!
  - [Getting Started](#getting-started)
    - [Update Cougarnet](#update-cougarnet)
    - [Resources Provided](#resources-provided)
- - [Part 1 - Address Resolution Protocol (#ARP)](#part-1---address-resolution-protocol-arp)
+ - [Part 1 - Address Resolution Protocol (ARP)](#part-1---address-resolution-protocol-arp)
    - [Scenario Description](#scenario-description)
    - [Starter Commands](#starter-commands)
    - [Frames Issued](#frames-issued)
@@ -78,7 +78,7 @@ The file `scenario1.cfg` describes a network with three hosts and one router:
 switch `s2`.  The topology looks like this:
 
 ```
-         +----+
+          +----+
           | a  |
           +----+
             |
@@ -405,7 +405,7 @@ before you begin, as it might be easier for you to do one before the other.
  1. Fill out the following methods (marked with `FIXME`):
 
     - `IPAddress.mask()` (approx. 1 - 2 lines of code)
-    - `Subnet.__contains__()` (approx. 1 line of code)
+    - `Subnet.__contains__()` (approx. 1 - 2 lines of code)
 
     These methods are short but require a bit of thought.
 
@@ -419,26 +419,28 @@ before you begin, as it might be easier for you to do one before the other.
 
     - The return values in the doc tests must be correct; and
     - The following should run without error (and without output):
-    ```
-    python3 -m doctest subnet.py
-    ```
+      ```
+      python3 -m doctest subnet.py
+      ```
 
  3. Fill out the following method (marked with `FIXME`):
 
     - `ForwardingTable.get_forwarding_entry()` (approx. 10 lines of code)
 
-      Remember to use longest prefix match for the last method!
+      Remember to use longest prefix match!
 
  4. Fill in the appropriate return value for each of the doctests for
     `ForwardingTable.get_forwarding_entry()` in `forwarding_table.py`.
-    `(None, None)` is currently used as a placeholder for each output, but the
-    return value _should_ be a tuple of type (`str`, `str`), corresponding to
-    outgoing interface name and next hop.
+    `('someintf', 'someip')` is currently used as a placeholder for each
+    output, but the return value _should_ yield a tuple of type (`str`, `str`),
+    corresponding to outgoing interface name and next hop-IP address (or
+    `None`).
 
-    Note that in the doctest, the next-hop IP address in every entry is
-    currently `None`, so the second value in the tuple returned will also
-    always be `None`.  This is just for testing.  When we apply this to a real
-    host or router, we will give real values for the next-hop IP address.
+    Note that in the doctest, the next-hop IP address in every entry has
+    a value other than `None`.  As you will see in the next part, there are
+    instances when a next-hop value if `None`, in which case the destination
+    IP address of the datagram being sent will be used as the next-hop IP
+    address.
 
     When you have finished your revisions of `forwarding_table.py`:
 
@@ -578,7 +580,7 @@ forwarding:
    - If the next hop returned from the forwarding table lookup is `None`, then
      use the destination IP address as the next hop.  This is the case for
      subnets to which the host is directly connected--i.e., the ones populated
-     from the directly connected prefixes above.
+     from the directly-connected prefixes above.
 
    - Call `send_packet_on_int()`, passing as arguments the IP datagram (`pkt`),
      the outgoing interface, and the next hop.
@@ -590,7 +592,7 @@ forwarding:
 
    This method is called by `_handle_frame()` when an IP frame is received, and
    the type field of the Ethernet frame header indicates that the Ethernet payload
-   is an IPv4 packet (i.e., its `type` is `ETH_P_IP`).
+   is an IPv4 packet (i.e., its type is `ETH_P_IP = 0x0800`).
 
    The method should do the following:
 

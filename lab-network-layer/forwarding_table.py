@@ -13,23 +13,23 @@
 
 Test the ForwardingTable.get_entry() method
 >>> table.get_entry('10.20.0.25')
-(None, None)
+('someintf', 'someip')
 >>> table.get_entry('10.20.0.34')
-(None, None)
+('someintf', 'someip')
 >>> table.get_entry('10.20.1.20')
-(None, None)
+('someintf', 'someip')
 >>> table.get_entry('10.20.3.1')
-(None, None)
+('someintf', 'someip')
 >>> table.get_entry('10.20.0.2')
-(None, None)
+('someintf', 'someip')
 >>> table.get_entry('10.20.0.11')
-(None, None)
+('someintf', 'someip')
 >>> table.get_entry('10.20.0.150')
-(None, None)
+('someintf', 'someip')
 >>> table.get_entry('10.20.0.7')
-(None, None)
+('someintf', 'someip')
 >>> table.get_entry('10.20.0.75')
-(None, None)
+('someintf', 'someip')
 '''
 
 from subnet import IPAddress, Subnet
