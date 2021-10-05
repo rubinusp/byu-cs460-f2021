@@ -557,15 +557,10 @@ forwarding:
        consist of the IP prefix for the interface, the interface itself as the
        outgoing interface, and a next hop of `None`.
 
-       Note that the way things are currently implemented, you can simply pass a `str` with
-       the value `<ip_address>/<prefix_len>` to `create_entry`, and it will mask the
-       appropriate bits to create the prefix for you, to save you some work.
-
-     In both cases, it will probably be helpful to use the docstrings from
-     `forwarding_table.py` as a guide for adding entries.  They show you how to
-     form an `IPAddress` instance from a `str`, how to instantiate a `Subnet`
-     (prefix) instance from an `IPAddress` instance, and how to add a
-     `ForwardingTable` entry using a `Subnet` instance and prefix length (`int`).
+     Note that the way things are currently implemented, you can simply pass a `str` with
+     the value `<ip_address>/<prefix_len>` to `ForwardingTable.create_entry()`, and it
+     will mask the appropriate bits to create the prefix for you, to save you some work.
+     You can use the docstrings from `forwarding_table.py` as a guide for adding entries.
 
  - `send_packet()`.  This method takes the following as an argument:
 
