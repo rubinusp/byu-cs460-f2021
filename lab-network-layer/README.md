@@ -157,7 +157,7 @@ listed.
    - There is initially no ARP entry for `r1`'s IP address in `a`'s table.
    - `a`'s ARP request should be seen by all hosts on the same LAN.
    - After the ARP response is received by `a`, the ICMP packet from `a` should
-     be seen by (only) `b`.
+     be seen by (only) `r1`.
    - The ICMP packet from `a` should be seen by (only) `r1`. Once IP forwarding
      is working (Part 3), then `c` will also see the packet.
 
