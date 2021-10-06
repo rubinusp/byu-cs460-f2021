@@ -273,7 +273,10 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
      sender to the MAC address of the sender.
    - Go through its queue of packets that were waiting for this ARP response,
      i.e., those whose next hop corresponds to the sender IP address in the
-     response. Send all the packets.
+     response. Send all these packets, by encapsulating each an an Ethernet
+     frame (now that you know the destination MAC address!).  See
+     `send_packet_on_int()` (the part of the instructions that are specific
+     to finding a matching entry in the ARP table for how to do this.
 
  - `_handle_frame()`.  This method takes the following as arguments:
 
