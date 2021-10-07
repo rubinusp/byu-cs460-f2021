@@ -602,10 +602,10 @@ forwarding:
      or if the destination IP address is the broadcast IP address
      (`255.255.255.255`), then call another method to handle the payload,
      depending on the protocol value in the IP header:
-     - For type TCP (`IPPROTO_TCP = 6`), extract the payload and call
-       `handle_tcp()`, passing the full IP datagram, including header.
-     - For type UDP (`IPPROTO_UDP = 17`), extract the payload and call
-       `handle_udp()`, passing the full IP datagram, including header.
+     - For type TCP (`IPPROTO_TCP = 6`), call `handle_tcp()`, passing the full
+       IP datagram, including header.
+     - For type UDP (`IPPROTO_UDP = 17`), call `handle_udp()`, passing the full
+       IP datagram, including header.
    - If the destination IP address does not match any IP address on the system,
      and it is not the IP broadcast, then call `not_my_packet()`, passing it
      the full IP datagram and the interface on which it arrived.
