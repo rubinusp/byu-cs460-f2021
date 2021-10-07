@@ -61,8 +61,8 @@ class ForwardingTable(object):
         if isinstance(prefix, str):
             prefix = Subnet(prefix)
 
-        if subnet in self.entries:
-            del self.entries[subnet]
+        if prefix in self.entries:
+            del self.entries[prefix]
 
     def get_entry(self, ip_address):
         '''
