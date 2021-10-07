@@ -207,11 +207,9 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
          [attribute](https://github.com/cdeccio/cougarnet/blob/main/README.md#baseframehandler)
          of the host.
        - The sender MAC address is the MAC address corresponding to the outgoing
-         interface.
+         interface (also found with the `int_to_info` attribute).
        - The target IP address is the next-hop IP address.
        - The target MAC address is all zeroes (this field is ignored by the receiver).
-       - The MAC address of the incoming interface is used as the sender MAC
-         address.
        - The opcode is request (`ARPOP_REQUEST = 1`).
 
      - build and send an Ethernet frame containing the ARP request, consisting
@@ -219,7 +217,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
        - Destination MAC address: the Ethernet broadcast address:
          (`ff:ff:ff:ff:ff:ff`)
        - Source MAC address: the MAC address corresponding to the outgoing
-         interface.
+         interface (see the `int_to_info` attribute).
        - Type ARP (`ETH_P_ARP =  0x0806`)
        - The ARP request as the Ethernet payload.
 
@@ -260,7 +258,7 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
      - Destination MAC address: the MAC address of the entity that sent the
        request sender (i.e., matching the target address in the ARP response).
      - Source MAC address: the MAC address corresponding to the interface on
-       which the request was received (and which will also the outgoing
+       which the request was received (and which will also be the outgoing
        interface).
      - Type ARP (`ETH_P_ARP = 0x0806`)
      - The ARP response packet as the Ethernet payload.
@@ -275,7 +273,10 @@ In the file `host.py`, flesh out following the skeleton methods related to ARP:
      sender to the MAC address of the sender.
    - Go through its queue of packets that were waiting for this ARP response,
      i.e., those whose next hop corresponds to the sender IP address in the
-     response. Send all the packets.
+     response. Send all these packets, by encapsulating each an an Ethernet
+     frame (now that you know the destination MAC address!).  See
+     `send_packet_on_int()` (the part of the instructions that are specific
+     to finding a matching entry in the ARP table) for how to do this.
 
  - `_handle_frame()`.  This method takes the following as arguments:
 
