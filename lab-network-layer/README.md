@@ -27,6 +27,7 @@ and a router!
    - [Testing](#testing-1)
    - [Helps](#helps-1)
  - [General Helps](#general-helps)
+ - [Putting the Pieces Together (Optional)](#putting-the-pieces-together-optional)
  - [Submission](#submission)
 
 
