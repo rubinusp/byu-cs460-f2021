@@ -439,7 +439,7 @@ before you begin, as it might be easier for you to do one before the other.
 
     Note that in the doctest, the next-hop IP address in every entry has
     a value other than `None`.  As you will see in the next part, there are
-    instances when a next-hop value if `None`, in which case the destination
+    instances when a next-hop value is `None`, in which case the destination
     IP address of the datagram being sent will be used as the next-hop IP
     address.
 
