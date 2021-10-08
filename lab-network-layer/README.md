@@ -560,7 +560,7 @@ forwarding:
        outgoing interface, and a next hop of `None`.
 
      Note that the way things are currently implemented, you can simply pass a `str` with
-     the value `<ip_address>/<prefix_len>` to `ForwardingTable.create_entry()`, and it
+     the value `<ip_address>/<prefix_len>` to `ForwardingTable.add_entry()`, and it
      will mask the appropriate bits to create the prefix for you, to save you some work.
      You can use the docstrings from `forwarding_table.py` as a guide for adding entries.
 
