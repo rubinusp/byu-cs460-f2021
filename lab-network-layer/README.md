@@ -578,6 +578,12 @@ forwarding:
    - Find the matching entry in the host's forwarding table.  This yields a
      two-tuple corresponding to an outgoing interface and next hop.
 
+   - If the outgoing interface returned from the forwarding table lookup is
+     `None`, then there is no matching route and thus no place to send the
+     packet.  A full-functioning router would drop the packet and return an
+     ICMP "network unreachable" packet to the sender.  But in this case, you
+     can simply return from the function.
+
    - If the next hop returned from the forwarding table lookup is `None`, then
      use the destination IP address as the next hop.  This is the case for
      subnets to which the host is directly connected--i.e., the ones populated
