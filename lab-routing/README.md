@@ -464,9 +464,9 @@ $ cougarnet --disable-ipv6 scenario3.cfg
 When all are working properly, test also with the `--terminal=none` option:
 
 ```
-$ cougarnet --disable-ipv6 scenario1.cfg
-$ cougarnet --disable-ipv6 scenario2.cfg
-$ cougarnet --disable-ipv6 scenario3.cfg
+$ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
+$ cougarnet --disable-ipv6 --terminal=none scenario2.cfg
+$ cougarnet --disable-ipv6 --terminal=none scenario3.cfg
 ```
 
 ## Helps
