@@ -209,11 +209,11 @@ After some time, the link between `r2` and `r8` is dropped:
 
 ```
        --- r7 ----r8
-      /    |      |
+      /    |
      /     |      |
    r9      |      X
      \     |      |
-      \    |      |
+      \    |
        --- r6     r2 --- r14 --- r15
             \    /  \    /
              \  /    \  /
