@@ -12,6 +12,9 @@ the routes learned.
    - [Scenario Descriptions](#scenario-descriptions)
    - [Packets Issued](#packets-issued)
  - [Instructions](#instructions)
+   - [Specification](#specification)
+   - [Scaffold Code](#scaffold-code)
+   - [Testing](#testing)
    - [Helps](#helps)
  - [Submission](#submission)
 
@@ -281,7 +284,10 @@ forwarding table entries have been updated properly.
 # Instructions
 
 Read Section 5.2.2 ("The Distance-Vector (DV) Routing Algorithm") in the book.
-Then implement a DV router in `dvrouter.py` with the following functionality:
+Then implement a DV router in `dvrouter.py` with the following functionality.
+
+
+## Specification
 
  - A router starts out knowing only about the IP prefixes with which it is
    directly connected.  In a general sense, this includes the subnets to which
@@ -301,11 +307,13 @@ Then implement a DV router in `dvrouter.py` with the following functionality:
    containing DV messages.  This has been done for you.  When you have the payload
    ready, you can simply call `self._send_msg()`, which takes the following as
    arguments:
+
    - `msg` - a `bytes` instance containing the DV message.  This will be sent
      as a UDP payload.  You do not need to create any headers for this; they
      will be created for you as part of normal socket functionality.
    - `dst` - a `str` instance containing the IP address to which the message
      should be sent.
+
    Sending a DV message to every neighbor means sending a DV message out every
    interface.  Since this is a discovery process, you don't actually know the
    IP address of your neighbor, so you cannot use that for your destination
@@ -316,6 +324,7 @@ Then implement a DV router in `dvrouter.py` with the following functionality:
    [here](https://github.com/cdeccio/cougarnet/blob/main/README.md#baseframehandler).
    Note that this subnet-specific broadcast address is used instead of a global
    broadcast (255.255.255.255) for (at least) two reasons:
+
    - Since our packet only needs to reach the other side of the link, to a
      neighbor that we know has an IP address on the same subnet, there is no
      reason to use a more general broadcast address with which the packet could
@@ -326,6 +335,7 @@ Then implement a DV router in `dvrouter.py` with the following functionality:
      should only elevate when necessary.
 
  - Each DV message has the following properties:
+
    - the source IP address corresponding to the interface out from which the
      packet is being sent. This can be found with the `int_to_info` attribute,
      which is documented
@@ -333,9 +343,11 @@ Then implement a DV router in `dvrouter.py` with the following functionality:
    - the name of the router sending the message.  This is can be found with the
      `hostname` attribute, which is initialized for you in `__init__()`.
    - the distance vector of the sending router.
+
    These properties can be put together however you want, but it is recommended
    that you create a `dict` object that you can convert to a `str` (and
    eventually to `bytes`) using JSON.  For example:
+
    ```python
    obj = { 'ip': '10.0.0.1', 'name': 'r1', 'dv': { ... } }
    obj_str = json.dumps(obj)
@@ -343,12 +355,15 @@ Then implement a DV router in `dvrouter.py` with the following functionality:
    ```
 
  - When a router receives a DV message from one of its neighbors, it does the following:
+
    - Converts the message to a `str` (from `bytes`) and decodes the JSON using
      something like the following:
+
      ```python
      obj_str = msg.decode('utf-8')
      obj = json.loads(obj_str)
      ```
+
    - Extracts the name, IP address, and DV of the neighboring node.
    - Discards the packet if it is one of its own packets (i.e., the
      `self.hostname` matches the name of the router in the DV message).
@@ -359,6 +374,7 @@ Then implement a DV router in `dvrouter.py` with the following functionality:
    - Saves the neighbor's DV, replacing any previous version, so it can be used
      later for running Bellman-Ford algorithm.
    - Uses its neighbors DVs to re-create its own DV and forwarding table.
+
  - A router creates its own DV using the Bellman-Ford algorithm.  By iterating
    through the DV of every neighbor, a router learns the shortest distance to
    every prefix known by its collective neighbors.  _Eventually_ (after
@@ -374,6 +390,7 @@ Then implement a DV router in `dvrouter.py` with the following functionality:
    those prefixes will always have a distance of of zero.
 
  - A router distributes its DV to its neighbors in two circumstances:
+
    - When a router's own newly-created DV (which creation is prompted by a DV
      message from a neighbor) is _different_ from its previous
      version, then a new DV message is distributed immediately.
@@ -392,6 +409,7 @@ Then implement a DV router in `dvrouter.py` with the following functionality:
    [previously](#starter-commands).
 
    There are two primary ways to update the forwarding table:
+
    - Call the `flush()` method on the forwarding table instance to clear out
      all existing entries, and then build the table from scratch; or
    - Call the `get_all_entries()` method on the forwarding table instance to
@@ -403,6 +421,9 @@ Then implement a DV router in `dvrouter.py` with the following functionality:
    message from a neighbor, the router discards that neighbor's DV, such that
    it and its prefixes are no longer considered in the computation of the
    router's own DV table (and forwarding table).
+
+
+## Scaffold Code
 
 In the file `dvrouter.py`, flesh out following the skeleton methods to help you
 implement the above specification.
@@ -438,6 +459,9 @@ implement the above specification.
    simply discard the DV of the neighbor whose link is down and then call
    `update_dv()`.
 
+
+## Testing
+
 Test your implementation against scenario 1:
 
 ```
@@ -468,6 +492,7 @@ $ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 $ cougarnet --disable-ipv6 --terminal=none scenario2.cfg
 $ cougarnet --disable-ipv6 --terminal=none scenario3.cfg
 ```
+
 
 ## Helps
 
