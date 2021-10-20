@@ -1,7 +1,14 @@
 import socket
 import subprocess
 
+from pyroute2 import IPRoute
+from pyroute2.netlink.rtnl import rtscopes
+from pyroute2.netlink.exceptions import NetlinkError
+
 class ForwardingTableNative(object):
+    def __init__(self):
+        self._ip = IPRoute()
+
     def add_entry(self, prefix, intf, next_hop):
         '''
         Add forwarding entry mapping prefix to interface and next hop IP
@@ -10,12 +17,19 @@ class ForwardingTableNative(object):
         prefix: str instance
         '''
 
-        cmd = ['sudo', 'ip', 'route', 'add', prefix]
+        if '/' not in prefix:
+            if ':' in prefix:
+                prefix += '/128'
+            else:
+                prefix += '/32'
+        kwargs = { 'dst': prefix }
         if next_hop is not None:
-            cmd += ['via', next_hop]
+            kwargs['gateway'] = next_hop
         if intf is not None:
-            cmd += ['dev', intf]
-        subprocess.run(cmd, check=True)
+            idx = self._ip.link_lookup(ifname=intf)[0]
+            kwargs['oif'] = idx
+
+        self._ip.route('add', **kwargs)
 
     def remove_entry(self, prefix):
         '''
@@ -24,18 +38,26 @@ class ForwardingTableNative(object):
         prefix: str
         '''
 
-        cmd = ['sudo', 'ip', 'route', 'del', prefix]
-        subprocess.run(cmd, check=True)
+        if '/' not in prefix:
+            if ':' in prefix:
+                prefix += '/128'
+            else:
+                prefix += '/32'
+        self._ip.route('del', dst=prefix)
 
-    def flush(self):
+    def flush(self, family=None, global_only=True):
         '''
         Flush the routing table.
 
         prefix: str
         '''
 
-        cmd = ['sudo', 'ip', 'route', 'flush', 'scope', 'global']
-        subprocess.run(cmd, check=True)
+        routes = self.get_all_entries(family=family, \
+                resolve=False, global_only=global_only)
+
+        for prefix in routes:
+            self.remove_entry(prefix)
+
 
     def get_entry(self, ip_address):
         '''
@@ -46,39 +68,58 @@ class ForwardingTableNative(object):
         ip_address: str
         '''
 
-        cmd = ['ip', 'route', 'get', ip_address]
-        output = subprocess.run(cmd, stdout=subprocess.PIPE, check=True).stdout.decode('utf-8')
-
         try:
-            route_str = output.splitlines()[0]
-        except IndexError:
-            return (None, None)
+            route = self._ip.route('get', dst=ip_address)[0]
+        except (NetlinkError, IndexError):
+            return None, None
 
-        cols = route_str.split()
-        if len(cols) > 1 and cols[1] == 'via':
-            next_hop, intf = cols[2], cols[4]
-            return intf, next_hop
+        if 'attrs' not in route:
+            return None, None
+        attrs = dict(route['attrs'])
+        if 'RTA_GATEWAY' in attrs:
+            next_hop = attrs['RTA_GATEWAY']
+        else:
+            next_hop = None
+        if 'RTA_OIF' in attrs:
+            intf = socket.if_indextoname(attrs['RTA_OIF'])
+        else:
+            intf = None
+        return intf, next_hop
 
-        return (None, None)
-
-    def get_all_entries(self, resolve=False, global_only=True):
-        output = ''
-        for v in ('-4', '-6'):
-            cmd = ['ip', v, 'route', 'show']
-            if global_only:
-                cmd += ['scope', 'global']
-            output += subprocess.run(cmd, stdout=subprocess.PIPE, check=True).stdout.decode('utf-8')
-            output += '\n'
-
+    def get_all_entries(self, family=None, resolve=False, global_only=True):
+        routes = self._ip.get_routes()
         entries = {}
-        for entry_str in output.splitlines():
-            cols = entry_str.split()
-            if len(cols) > 1 and cols[1] == 'via':
-                prefix, next_hop, intf = cols[0], cols[2], cols[4]
-            elif len(cols) > 1 and cols[1] == 'dev':
-                prefix, next_hop, intf = cols[0], None, cols[2]
-            else:
+        for route in routes:
+            if 'attrs' not in route or \
+                    'dst_len' not in route:
                 continue
+            if global_only and \
+                    'scope' in route and \
+                    route['scope'] != rtscopes['RT_SCOPE_UNIVERSE']:
+                continue
+            if family is not None and route['family'] != family:
+                continue
+            prefix_len = route['dst_len']
+            attrs = dict(route['attrs'])
+            if prefix_len == 0:
+                if route['family'] == socket.AF_INET:
+                    prefix = '0.0.0.0/0'
+                else:
+                    prefix = '::/0'
+            elif route['family'] == socket.AF_INET and prefix_len == 32:
+                prefix = attrs['RTA_DST']
+            elif route['family'] == socket.AF_INET6 and prefix_len == 128:
+                prefix = attrs['RTA_DST']
+            else:
+                prefix = f"{attrs['RTA_DST']}/{prefix_len}"
+            if 'RTA_GATEWAY' in attrs:
+                next_hop = attrs['RTA_GATEWAY']
+            else:
+                next_hop = None
+            if 'RTA_OIF' in attrs:
+                intf = socket.if_indextoname(attrs['RTA_OIF'])
+            else:
+                intf = None
             if resolve:
                 if '/' not in prefix:
                     try:
@@ -90,8 +131,5 @@ class ForwardingTableNative(object):
                         next_hop = socket.getnameinfo((next_hop, 0), 0)[0]
                     except:
                         pass
-            else:
-                if prefix == 'default':
-                    prefix = '0.0.0.0/0'
             entries[prefix] = (intf, next_hop)
         return entries
