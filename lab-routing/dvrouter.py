@@ -84,6 +84,17 @@ class DVRouter(BaseFrameHandler):
     def handle_down_link(self, neighbor):
         self.log(f'Link down: {neighbor}')
 
+    def resolve_neighbor_dvs(self):
+        '''
+        Return a copy of the mapping of neighbors to distance vectors, with IP
+        addresses replaced by names in every neighbor DV.
+        '''
+
+        neighbor_dvs = {}
+        for neighbor in self.neighbor_dvs:
+            neighbor_dvs[neighbor] = self.resolve_dv(self.neighbor_dvs[neighbor])
+        return neighbor_dvs
+
     def resolve_dv(self, dv):
         '''
         Return a copy of distance vector dv with IP addresses replaced by
