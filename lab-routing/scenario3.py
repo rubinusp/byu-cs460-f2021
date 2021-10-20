@@ -55,7 +55,7 @@ class SimHost9(SimHost):
 class SimHost7(SimHost):
     def schedule_items(self, event_loop):
         event_loop.schedule_event(9, self.send_icmp_echo, ('r15',))
-        event_loop.schedule_event(15, self.send_icmp_echo, ('r15',))
+        event_loop.schedule_event(18, self.send_icmp_echo, ('r15',))
 
 def main():
     hostname = socket.gethostname()
