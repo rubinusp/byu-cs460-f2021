@@ -158,12 +158,6 @@ In scenario, routers `r1` through `r5` are connected in a line.
   r1 --- r2 --- r3 --- r4 --- r5
 ```
 
-After some time, the link between `r2` and `r3` is dropped:
-
-```
-  r1 --- r2 -X- r3 --- r4 --- r5
-```
-
 
 ### Scenario 2
 
@@ -249,22 +243,17 @@ of this call to `ping` is to check that:
    source;
  - the path from source to destination and back again is the shortest path.
 
-There is only exception to this.  In scenario 1, after a link is dropped, one
-of the ICMP `ping` commands will not succeed because there will be no path.
-
 In each scenario the first set of ICMP packets will be issued after routes will
 have propagated, distance vectors converged, and forwarding tables have the
-proper entries for shortest-path forwarding.  A second set of ICMP packets will
-be issued after a given link has been dropped and the distance vectors and
-forwarding table entries have been updated properly.
+proper entries for shortest-path forwarding.  For scenarios 2 and 3 a second
+set of ICMP packets will be issued after a given link has been dropped and the
+distance vectors and forwarding table entries have been updated properly.
 
 
 ### Scenario 1
 
  - 4 seconds: ICMP packet sent from `r1` to `r5` and back again
  - 5 seconds: ICMP packet sent from `r1` to `r5` and back again
- - 6 seconds: Link dropped between `r2` and `r3`
- - 10 seconds: ICMP packet sent from `r1` to `r5` (not successful)
 
 
 ### Scenario 2
