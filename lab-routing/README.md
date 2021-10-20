@@ -35,6 +35,15 @@ Remember that you can always get the most up-to-date documentation for
 Cougarnet [here](https://github.com/cdeccio/cougarnet/blob/main/README.md).
 
 
+## Install Dependencies
+
+Install [pyroute2](https://pyroute2.org/) by running the following:
+
+```
+$ sudo apt install python3-pyroute2
+```
+
+
 ## Resources Provided
 
 The files given to you for this lab are the following:
