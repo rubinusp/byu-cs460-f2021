@@ -315,8 +315,14 @@ Then implement a DV router in `dvrouter.py` with the following functionality.
    IP address of your neighbor, so you cannot use that for your destination
    address, `dst`.  Instead, for a given interface, you will send to the IP
    address that is the _broadcast_ address corresponding to the subnet on the
-   interface.  This can be found with the `int_to_info` attribute, which is
-   documented
+   interface.  The broadcast address for a given subnet is simply the subnet
+   prefix with all of the host bits set--or, the very last address in the
+   subnet.  For example, the broadcast address for 10.1.2.0/24 is 10.1.2.254.
+   And the broadcast address for 10.1.2.20/30 is 10.1.2.23.
+   
+   However, in the lab, you won't have to calculate this yourself. The
+   broadcast IP address for the subnet corresponding to given interface can be
+   found with the `int_to_info` attribute, which is documented
    [here](https://github.com/cdeccio/cougarnet/blob/main/README.md#baseframehandler).
    Note that this subnet-specific broadcast address is used instead of a global
    broadcast (255.255.255.255) for (at least) two reasons:
