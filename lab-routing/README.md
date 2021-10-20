@@ -266,7 +266,7 @@ forwarding table entries have been updated properly.
  - 4 seconds: ICMP packet sent from `r1` to `r5` and back again
  - 5 seconds: ICMP packet sent from `r1` to `r5` and back again
  - 6 seconds: Link dropped between `r2` and `r3`
- - 10 seconds: ICMP packet sent from `r1` to `r5` and back again
+ - 10 seconds: ICMP packet sent from `r1` to `r5` (not successful)
 
 
 ### Scenario 2
@@ -287,7 +287,7 @@ forwarding table entries have been updated properly.
  - 8 seconds: ICMP packet sent from `r9` to `r14` and back again
  - 9 seconds: ICMP packet sent from `r7` to `r15` and back again
  - 10 seconds: Link dropped between `r2` and `r8`
- - 15 seconds: ICMP packet sent from `r7` to `r15` and back again
+ - 18 seconds: ICMP packet sent from `r7` to `r15` and back again
 
 
 # Instructions
