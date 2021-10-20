@@ -193,9 +193,6 @@ After some time, the link between `r1` and `r5` is dropped:
 
 ### Scenario 3
 
-NOTE: Scenario 3 is a work-in-progress.  Please start with getting things
-working with scenarios 1 and 2, and check back here.
-
 In scenario, routers `r1` through `r15` are connected in a more complex
 topology.
 
