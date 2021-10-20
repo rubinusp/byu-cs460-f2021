@@ -7,6 +7,7 @@ the routes learned.
 
  - [Getting Started](#getting-started)
    - [Update Cougarnet](#update-cougarnet)
+   - [Install Dependencies](#install-dependencies)
    - [Resources Provided](#resources-provided)
    - [Starter Commands](#starter-commands)
    - [Scenario Descriptions](#scenario-descriptions)
