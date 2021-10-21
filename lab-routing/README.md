@@ -317,7 +317,7 @@ Then implement a DV router in `dvrouter.py` with the following functionality.
    address that is the _broadcast_ address corresponding to the subnet on the
    interface.  The broadcast address for a given subnet is simply the subnet
    prefix with all of the host bits set--or, the very last address in the
-   subnet.  For example, the broadcast address for 10.1.2.0/24 is 10.1.2.254.
+   subnet.  For example, the broadcast address for 10.1.2.0/24 is 10.1.2.255.
    And the broadcast address for 10.1.2.20/30 is 10.1.2.23.
    
    However, in the lab, you won't have to calculate this yourself. The
