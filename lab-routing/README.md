@@ -253,7 +253,7 @@ distance vectors and forwarding table entries have been updated properly.
 ### Scenario 1
 
  - 4 seconds: ICMP packet sent from `r1` to `r5` and back again
- - 5 seconds: ICMP packet sent from `r1` to `r5` and back again
+ - 5 seconds: ICMP packet sent from `r2` to `r4` and back again
 
 
 ### Scenario 2
