@@ -296,7 +296,7 @@ Then implement a DV router in `dvrouter.py` with the following functionality.
    will look something like this:
 
    - Prefix: 10.0.0.2; Distance: 0
-   - Prefix: 10.0.0.6; Distance: 0
+   - Prefix: 10.0.0.5; Distance: 0
 
  - A router sends its own DV to every one of its neighbors in a UDP datagram.
    You do not have to set up the socket for sending and receiving UDP datagrams
