@@ -298,6 +298,9 @@ Then implement a DV router in `dvrouter.py` with the following functionality.
    - Prefix: 10.0.0.2; Distance: 0
    - Prefix: 10.0.0.5; Distance: 0
 
+   The IP address for each interface can be found with the `int_to_info`
+   attribute.
+
  - A router sends its own DV to every one of its neighbors in a UDP datagram.
    You do not have to set up the socket for sending and receiving UDP datagrams
    containing DV messages.  This has been done for you.  When you have the payload
