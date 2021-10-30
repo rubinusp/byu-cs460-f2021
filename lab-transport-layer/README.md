@@ -237,6 +237,12 @@ Note that the correct values of `correct_value` for testing the `UDPHeader`
 class have already been included, to give you an idea of how this should go.
 
 
+# Part 2 - UDP Sockets
+
+
+# Part 3 - TCP Sockets and Three-Way Handshake
+
+
 # General Helps
 
  - You can modify `scenario1.py`, `scenario2.py`, and the corresponding
