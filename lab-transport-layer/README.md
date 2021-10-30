@@ -152,6 +152,7 @@ are fleshed out for you, to give you an idea of how this should go.
 <tr>
 <td colspan="32">Options and padding :::</td></tr>
 </table>
+(See also: [IP, Internet Protocol](http://www.networksorcery.com/Enp/protocol/ip.htm))
 
 
 #### UDP Header
@@ -171,6 +172,7 @@ are fleshed out for you, to give you an idea of how this should go.
 <tr>
 <td colspan="32">Data :::</td></tr>
 </table>
+(See also: [UDP, User Datagram Protocol](http://www.networksorcery.com/Enp/protocol/udp.htm))
 
 
 #### TCP Header
@@ -202,6 +204,7 @@ are fleshed out for you, to give you an idea of how this should go.
 <tr>
 <td colspan="32">Data :::</td></tr>
 </table>
+(See also: [TCP, Transmission Control Protocol](http://www.networksorcery.com/Enp/protocol/tcp.htm))
 
 
 ### Step 2 - Complete and Tests Code against Unit Tests
