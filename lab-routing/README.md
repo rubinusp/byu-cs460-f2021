@@ -411,7 +411,7 @@ Then implement a DV router in `dvrouter.py` with the following functionality.
    allow you to pass `None` as the interface, and it can be inferred from the
    next hop (this is made possible because of the local forwarding table
    entries, which are created by default, as described
-   [previously](#starter-commands).
+   [previously](#starter-commands)).
 
    There are two primary ways to update the forwarding table:
 
