@@ -154,6 +154,23 @@ are fleshed out for you, to give you an idea of how this should go.
 </table>
 (See also http://www.networksorcery.com/Enp/protocol/ip.htm)
 
+ - Version - IP version.  This will always be 4 for the IPv4 header.
+ - IHL - Internet header length in 4-byte words.  The IPv4 header is 20 bytes long without
+   options, so this field will always be 5.
+ - Differentiated Services - This will always be 0 for our purposes.
+ - Total length - This is the length of the entire IP datagram, including IP header and payload.
+ - Identification - The ID field for reassembling fragmented packets.  We will not be handling
+   fragmentation in this, so this field can be 0.
+ - Flags - Same.
+ - Fragment offset - Same.
+ - TTL - Time-to-live value.  We will initialize this to 64 for any newly-create IPv4 packets.
+ - Protocol - The protocol associated with the next header.  For example TCP (`IPPROTO_TCP = 6`)
+   or UDP (`IPPROTO_UDP = 17`).
+ - Header checksum - The checksum of the IPv4 header.  For the purposes of this lab, we will not
+   be calculating a checksum, so 0 can be used here.
+ - Source IP address
+ - Destination IP address
+ - Options and padding ::: - Not used.
 
 #### UDP Header
 
@@ -169,11 +186,14 @@ are fleshed out for you, to give you an idea of how this should go.
 <tr>
 <td colspan="16">Length</td>
 <td colspan="16">Checksum</td></tr>
-<tr>
-<td colspan="32">Data :::</td></tr>
 </table>
 (See also http://www.networksorcery.com/Enp/protocol/udp.htm)
 
+ - Source Port
+ - Destination Port
+ - Length - This is the length of the entire UDP datagram, including UDP header and payload.
+ - Checksum - The checksum of a pseudo IPv4 header.  For the purposes of this lab, we will
+   not be calculating a UDP checksum, so 0 can be used here.
 
 #### TCP Header
 
@@ -205,6 +225,29 @@ are fleshed out for you, to give you an idea of how this should go.
 <td colspan="32">Data :::</td></tr>
 </table>
 (See also http://www.networksorcery.com/Enp/protocol/tcp.htm)
+
+ - Source Port
+ - Destination Port
+ - Sequence Number
+ - Acknowledgment Number
+ - Data Offset - The length of the TCP header in 4-byte words.  The TCP header is
+   20 bytes long without options, so this field will always be 5.
+ - reserved - always 0
+ - ECN - Explicit Congestion Notification.  This will not be used in this lab,
+   so this field can always be 0.
+ - Control Bits (flags) - Each flag is listed below from left to right (most
+   significant to least significant).  However, note that only the `SYN` and `ACK`
+   flags are likely to be used for this lab.
+   - `URG`
+   - `ACK`
+   - `PSH`
+   - `RST`
+   - `SYN`
+   - `FIN`
+ - Window - the receive window advertised by the sending host
+ - Checksum - The checksum of a pseudo IPv4 header.  For the purposes of this lab, we will
+   not be calculating a TCP checksum, so 0 can be used here.
+ - Urgent Pointer - Not used for this lab, so this field can always be 0.
 
 
 ### Step 2 - Complete and Tests Code against Unit Tests
