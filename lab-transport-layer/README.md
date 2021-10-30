@@ -221,8 +221,6 @@ are fleshed out for you, to give you an idea of how this should go.
 <td colspan="16">Urgent Pointer</td></tr>
 <tr>
 <td colspan="32">Options and padding :::</td></tr>
-<tr>
-<td colspan="32">Data :::</td></tr>
 </table>
 (See also http://www.networksorcery.com/Enp/protocol/tcp.htm)
 
