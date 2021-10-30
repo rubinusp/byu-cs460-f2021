@@ -126,6 +126,8 @@ are fleshed out for you, to give you an idea of how this should go.
 
 #### IPv4 Header
 
+Please note that the diagram describing the IPv4 header is 32 bits (columns)
+wide.
 <table border="1">
 <tr>
 <th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th>
@@ -174,6 +176,8 @@ are fleshed out for you, to give you an idea of how this should go.
 
 #### UDP Header
 
+Please note that the diagram describing the UDP header is 32 bits (columns)
+wide.
 <table border="1">
 <tr>
 <th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th>
@@ -197,6 +201,8 @@ are fleshed out for you, to give you an idea of how this should go.
 
 #### TCP Header
 
+Please note that the diagram describing the TCP header is 32 bits (columns)
+wide.
 <table border="1">
 <tr>
 <th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th>
