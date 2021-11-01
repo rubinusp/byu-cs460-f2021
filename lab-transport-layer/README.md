@@ -15,7 +15,7 @@ TODO
 Make sure you have the most up-to-date version of Cougarnet installed by
 running the following in your `cougarnet` directory:
 
-```
+```bash
 $ git pull
 $ python3 setup.py build
 $ sudo python3 setup.py install
@@ -93,7 +93,7 @@ start it up:
 
 Run the following command:
 
-```
+```bash
 $ cougarnet --disable-ipv6 --display scenario1.cfg
 ```
 
@@ -274,13 +274,13 @@ instantiated header object, to be converted to `bytes`.
 
 Run the following to test your header-handling code:
 
-```
+```bash
 python3 test_headers.py
 ```
 
 or, alternatively:
 
-```
+```bash
 python3 -m unittest test_headers.py
 ```
 
@@ -386,7 +386,7 @@ In the file `mysocket.py`, flesh out following the skeleton methods:
 At this point, you should be able to run the following command to run scenario
 1:
 
-```
+```bash
 $ cougarnet --disable-ipv6 --display --wireshark s1 scenario1.cfg
 ```
 
@@ -425,26 +425,253 @@ In the file `transporthost.py`, flesh out following method:
 Test your implementation against scenario 1.  _After_ the service has been
 started, the output should show that `a` sent the UDP datagram and that `b`
 received the UDP datagram--both at the host level and the application levels
-(it will look a little redundant, but the loggint happens at both layers.  The
+(it will look a little redundant, but the logging happens at both layers).  The
 output should also show that `a` received the echoed message, both at the host
 level and the application level.  After the exchange between hosts `a` and `b`,
 you should see output for a similar exchange between hosts `c` and `b`.
 
 When it is working properly, test also with the `--terminal=none` option:
 
-```
+```bash
 $ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 ```
 
 
 # Part 3 - TCP Sockets and Three-Way Handshake
 
+The `mysocket.py` file also contains a stub implementation of a TCP socket in
+the `TCPSocket` class.  Typically the `TCPSocket` class is instantiated in one
+of two ways:
+
+ - With call to the class method `TCPSocket.connect()`, in which:
+   - a new `TCPSocket` instance is created with a given local address, local
+     port, remote address, and remote port, and an initial state of `CLOSED`;
+     and
+   - the `initiate_connection()` method is called on the newly created socket,
+     starting the TCP three-way handshake.  Note that this method will change
+     the state to `SYN_SENT`.
+   Additionally, the 4-tuple of local address, local port, remote address, and
+   remote port is mapped to the newly created `TCPSocket` instance on the host,
+   but that is not done within the method.
+ - When an instance of the `TCPListenerSocket` class calls its own
+   `handle_packet()` method.  Because a new socket is required for every TCP
+   connection, the `TCPListenerSocket` class exists to simply handle packets
+   that are for new TCP connection requests, instantiating a new `TCPSocket`
+   with each request, so each 4-tuple (remote address, remote port, local
+   address, local port) uniquely maps to its own `TCPSocket` instance.  In the
+   `handle_packet()` method:
+   - a new `TCPSocket` instance is created with a given local address, local
+     port, remote address, and remote port, and an initial state of `LISTEN`;
+   - the 4-tuple of local address, local port, remote address, and remote port is
+     mapped to the newly created `TCPSocket` instance on the host; and
+   - the `handle_packet()` method is called on the newly created socket,
+     handling the first packet received on the server side of the TCP three-way
+     handshake.  Note that this method will change the state to `SYN_RECEIVED`.
+
+From this point on, when a packet, `pkt`, is received by a `TCPSocket` instance, `sock`,
+the following is called:
+
+```python
+sock.handle_packet(pkt)
+```
+The `handle_packet()` method first checks the state of the connection.  If the
+connection is not `ESTABLISHED`, then it calls the `continue_connection()`
+method.  The `continue_connection()` method looks like this:
+
+```python
+if self.state == TCP_STATE_LISTEN:
+    self.handle_syn(pkt)
+elif self.state == TCP_STATE_SYN_SENT:
+    self.handle_synack(pkt)
+elif self.state == TCP_STATE_SYN_RECEIVED:
+    self.handle_ack_after_synack(pkt)
+```
+
+The implementation of the three helper functions (`handle_syn()`,
+`handle_synack()`, and `handle_ack_after_synack()`) is your task.
+Once you flesh them out, the TCP three-way handshake will be complete and the
+connection established!
+
+The whole process should look something like this, which is an example taken
+directly from RFC 793:
+```
+
+        TCP A                                                TCP B
+
+    1.  CLOSED                                               LISTEN
+
+    2.  SYN-SENT    --> <SEQ=100><CTL=SYN>               --> SYN-RECEIVED
+
+    3.  ESTABLISHED <-- <SEQ=300><ACK=101><CTL=SYN,ACK>  <-- SYN-RECEIVED
+
+    4.  ESTABLISHED --> <SEQ=101><ACK=301><CTL=ACK>       --> ESTABLISHED
+
+    5.  ESTABLISHED --> <SEQ=101><ACK=301><CTL=ACK><DATA> --> ESTABLISHED
+
+    (https://tools.ietf.org/html/rfc793#section-3.4)
+
+```
+
+
+## Packets Issued
+
+With `scenario2.cfg`, the following packets are sent at the times noted:
+Each sub-bullet describes the purpose of the primary bullet under which it is
+listed.
+
+ - 5 seconds: Host `a` calls:
+   ```python
+   TCPSocket.connect('10.0.0.1', <randomport>, '10.0.0.2', 1234, ...))
+   ```
+   which both creates a `TCPSocket` instance and initiates the TCP three-way
+   handshake.
+   - There is no service listening on 10.0.0.2 port 1234
+ - 6 seconds: Host `b` creates a `TCPListenerSocket`:
+   ```python
+   TCPListenerSocket('10.0.0.2', 1234, ...)
+   ```
+   - There is now a service listening on 10.0.0.2 port 1234
+ - 7 seconds: Host `a` calls:
+   ```python
+   TCPSocket.connect('10.0.0.1', <randomport>, '10.0.0.2', 1234, ...))
+   ```
+   which both creates a `TCPSocket` instance and initiates the TCP three-way
+   handshake.
+   - There is now a service listening on 10.0.0.2 port 1234
+ - 8 seconds: Host `a` sends a TCP packet from a `TCPSocket` instance, with a
+   new randomly-selected source port, pretending that it already has an
+   established connection (i.e., client-side socket has state `ESTABLISHED` and
+   packet does not have `SYN` flag set).
+   - There is no TCP socket associated with the 4-tuple of the incoming TCP
+     packet.
+ - 9 seconds: Host `c` calls:
+   ```python
+   TCPSocket.connect('10.0.0.3', <randomport>, '10.0.0.2', 1234, ...))
+   ```
+   which both creates a `TCPSocket` instance and initiates the TCP three-way
+   handshake.
+   - There is a service listening on 10.0.0.2 port 1234
+
+
+## Instructions
+
+In the file `mysocket.py`, flesh out following the skeleton methods:
+
+ - `create_packet()`.  This method is used create a packet to be sent to a
+   remote host.  Use the `src`, `sport`, `dst`, `dport`, and `data` arguments
+   to create a TCP packet with IP header, TCP header, and optional TCP segment
+   (i.e., `data`).  The method should return a `bytes` instance that is ready
+   to be sent on the wire--after an Ethernet frame header is added.
+
+ - `send_packet()`.  This method is used to create and send a TCP packet.
+   It will be used both for control packets (e.g., those associated with the
+   three-way handshake) as well as any packets with segment data.  Note that
+   this method should largely be implemented by calling
+   `TCPHeader.create_packet()` and `TCPHeader._send_ip_packet()`.
+
+ - `handle_syn()`.  This method takes the following as an argument:
+
+   - `pkt`: an IP packet, complete with IP header.  Generally, this could be
+     either an IPv4 or an IPv6 packet, but for the purposes of this lab, it
+     will just be IPv4.
+
+   Handle an incoming TCP SYN packet.  Ignore the packet if the `SYN` flag is
+   not sent.  Save the sequence in the packet as the base sequence of the
+   remote side of the connection.  Send a corresponding SYNACK packet, which
+   includes both our own base sequence number and an acknowledgement of the
+   remote side's sequence number (base + 1).  Transition to state
+   `SYN_RECEIVED`.
+
+ - `handle_synack()`.  This method takes the following as an argument:
+
+   - `pkt`: an IP packet, complete with IP header.  Generally, this could be
+     either an IPv4 or an IPv6 packet, but for the purposes of this lab, it
+     will just be IPv4.
+
+   Handle an incoming TCP SYNACK packet.  Ignore the packet if the `SYN` flag
+   is not yet, the `ACK` flag is not set, or if the ack field does not
+   represent our current sequence (base + 1).  Save the sequence in the packet
+   as the base sequence of the remote side of the connection.  Send a
+   corresponding ACK packet, which includes both our current sequence number
+   (base + 1) and an acknowledgement of the remote side's sequence number
+   (base + 1).  Transition to state `ESTABLISHED`.
+
+ - `handle_ack_after_synack()`.  This method takes the following as an argument:
+
+   - `pkt`: an IP packet, complete with IP header.  Generally, this could be
+     either an IPv4 or an IPv6 packet, but for the purposes of this lab, it
+     will just be IPv4.
+
+   Handle an incoming TCP ACK packet.  Ignore the packet if the `SYN` flag is
+   set, the `ACK` flags is not set, or the ack field does not represent our
+   current sequence (base + 1).  Transition to state `ESTABLISHED`.
+
+At this point, you should be able to run the following command to run scenario
+2:
+
+```bash
+$ cougarnet --disable-ipv6 --display --wireshark s1 scenario2.cfg
+```
+
+You have 5 seconds to select the `s1-b` interface before the initial TCP SYN
+packet is sent by host `a`.  At this point, you should see log messages for
+packets the TCP SYN packets sent in the scenario, and you should
+also see those packets in the Wireshark output.  However, you should not see
+any return packets (e.g., the SYNACK).  That is because you are missing the
+transport-layer multiplexing--the glue that passes the incoming packets to
+their correct socket.
+
+In the file `transporthost.py`, flesh out following method:
+
+ - `handle_tcp()`.  This method takes the following as an argument:
+
+   - `pkt`: an IP packet, complete with IP header.  Generally, this could be
+     either an IPv4 or an IPv6 packet, but for the purposes of this lab, it
+     will just be IPv4.
+
+   It is called by `handle_ip()` when the packet is determined to be a TCP
+   packet. `handle_tcp()` should look for a open TCP socket corresponding to
+   the 4-tuple of the incoming packet. If such a mapping is found, then the
+   `handle_packet()` method is called on that socket.  If no mapping of the
+   4-tuple is found, then a mapping is looked for with only the local address
+   and local port--i.e., a `TCPListenerSocket` instance, and the
+   `handle_packet()` method is called on the corresponding socket.
+
+   See several examples of where `install_socket_tcp()` and
+   `install_listener_tcp()` are called for client and server, respectively, in
+   `scenario2.py`.
+
+   If there is no mapping of either type found, then call the `no_socket_tcp()`
+   method.  At this point, you do not need to flesh out the `no_socket_tcp()`
+   method; it is simply a placeholder.
+
+
+## Testing
+
+Test your implementation against scenario 2.  _Before_ the service has been
+started, the output should reflect that there is no active socket on the given
+IP address and port.  However, _after_ the service has been started, the output
+should reflect the TCP three-way handshake, but only when the an initial packet
+has the `SYN` flag set.  After the exchange between hosts `a` and `b`, you
+should see output for a similar exchange between hosts `c` and `b`.
+
+When it is working properly, test also with the `--terminal=none` option, and
+make sure it works for both scenarios:
+
+```
+$ cougarnet --native-apps=none --disable-ipv6 --terminal=none scenario1.cfg
+$ cougarnet --native-apps=none --disable-ipv6 --terminal=none scenario2.cfg
+```
+
 
 # General Helps
 
  - You can modify `scenario1.py`, `scenario2.py`, and the corresponding
-   using only your `host.py`, `subnet.py`, and `forwarding_table.py`. The other
-   files used will be the stock files [you were provided](#resources-provided).
+   configuration files all you want for testing and for experimentation.  If
+   this helps you, please do it!  Just note that your submission will be graded
+   using only your `headers.py`, `test_headers.py`, `mysocket.py`, and
+   `transporthost.py` files.  The other files used will be the stock files
+   [you were provided](#resources-provided).
  - Save your work often, especially after you move from part to part.  You are
    welcome (and encouraged) to use a version control repository, such as
    GitHub.  However, please ensure that it is a private repository!
@@ -455,7 +682,7 @@ $ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
 Use the following commands to create a directory, place your working files in
 it, and tar it up:
 
-```
+```bash
 $ mkdir transport-lab
 $ cp headers.py test_headers.py transporthost.py mysocket.py transport-lab
 $ tar -zcvf transport-lab.tar.gz transport-lab
