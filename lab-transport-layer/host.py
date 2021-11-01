@@ -34,6 +34,10 @@ class Host(BaseFrameHandler):
 
     def handle_ip(self, pkt, intf):
         proto = pkt[9]
+        dst = ip_binary_to_str(pkt[16:20])
+        if not self.int_to_info[intf].ipv4addrs or \
+                dst != self.int_to_info[intf].ipv4addrs[0]:
+            return
         if proto == IPPROTO_TCP:
             self.handle_tcp(pkt)
         elif proto == IPPROTO_UDP:

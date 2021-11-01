@@ -58,28 +58,28 @@ The files given to you for this lab are the following:
 ## Topology
 
 The files `scenario1.cfg` and `scenario2.cfg` describe two different scenarios,
-but the network topology is the same for both: host `a` is connected to host
-`b` via a switch, `s1`
+but the network topology is the same for both: hosts `a`, `b`, and `c` are
+connected to each other via a single switch, `s1`.
 
 ```
-+----+
-| a  |
-+----+
-  |
-  |
-  |
-+----+
-| s1 |
-+----+
-  |
-  |
-  |
-+----+
-| b  |
-+----+
+          +----+
+          | a  |
+          +----+
+            |
+            |
+            |
++---+     +----+
+| b | --- | s1 |
++---+     +----+
+            |
+            |
+            |
+          +----+
+          | c  |
+          +----+
 ```
 
-`s1` has switching functionality already built in, and `a` and `b` have the
+`s1` has switching functionality already built in, and all hosts have the
 basic functionality of taking a packet, encapusulating in an Ethernet frame,
 and sending it to the appropriate host on its LAN/subnet.  What you will be
 adding is the transport-layer functionality--building TCP and UDP headers for
@@ -97,7 +97,15 @@ Run the following command:
 $ cougarnet --disable-ipv6 --display scenario1.cfg
 ```
 
-TODO
+At this point, the only output will be log messages indicating that messages
+are being sent from the `NetcatUDP` instance on hosts `a` and `c` to a remote
+address and port.  While eventually (after the first message) there is an
+instance of `EchoServerUDP` running on host `b`, none of the messages will
+actually be sent, nor will they be received or returned by that `EchoServerUDP`
+instance on `b`.  That is because the socket implementations that are
+responsible for sending and receiving have yet to be fleshed out--by you!  In
+the end, you will log messages indicating that your UDP messages were sent by
+`a` and `c` and received by `b`, and the responses were seen by `a` and `c`.
 
 
 # Part 1 - IPv4, UDP, and TCP Headers
@@ -285,6 +293,148 @@ class have already been included, to give you an idea of how this should go.
 
 
 # Part 2 - UDP Sockets
+
+The `mysocket.py` file contains a stub implementation of a UDP socket in
+the `UDPSocket` class.  Instantiating the class involves passing local address
+(`local_addr`) and local port (`local_port`), which are the equivalent of
+creating a socket with (`socket()`) and calling `bind()` on it.  Thus, an
+instantiated `UDPSocket` object knows the destination address and port
+associated with all UDP/IP packets arriving to it, and the source address and
+port associated with all UDP/IP packets that are sent from it.
+
+Note that, in addition to the local address and port, two functions are passed
+as arguments to `UDPSocket.__init__()` and assigned as callable members
+variables.  That is, they can be used just like methods.
+`UDPSocket._send_ip_packet()` is what is called to send an IP datagram that is
+ready to be encapsulated in an Ethernet frame and sent out of one of the host's
+interface.  In fact, this function is just a pointer to the bound
+`Host.send_packet()` method associated with the host for which the `UDPSocket`
+was created.  `UDPSocket._notify_on_data()` is simply a function called by the
+socket instance to let the application know there is data.
+
+The two methods `UDPSocket.sendto()` and `UDPSocket.recvfrom()` represent the
+functions of the same names in the socket API, for sending and receiving data
+respectively.  The idea is that `UDPSocket.sendto()` and `UDPSocket.recvfrom()`
+are called by the applications, as a socket-like API, just as would be done
+with real sockets.  These methods, in turn, call other methods, which you will
+flesh out as part of your UDP socket implementation, such as
+`UDPSocket.handle_packet()` and `UDPSocket.send_packet()`.  For example:
+
+```python
+sock.sendto(b'abc123', '192.0.2.1', 1234)
+```
+
+and:
+
+```python
+data, remote_addr, remote_port = sock.recvfrom()
+```
+
+
+## Packets Issued
+
+With `scenario1.cfg`, the following packets are sent at the times noted:
+Each sub-bullet describes the purpose of the primary bullet under which it is
+listed.
+
+ - 5 seconds: Host `a` instantiates a `UDPSocket`, `s`, as part of a
+   `NetcatUDP` application and calls `s.sendto(b'...', '10.0.0.2', 1234)`.
+   - There is no service listening on 10.0.0.2 port 1234
+ - 6 seconds: Host `b` starts an instance of `EchoServerUDP` on port 1234
+   - There is now a service listening on 10.0.0.2 port 1234
+ - 7 seconds: Host `a` instantiates a `UDPSocket`, `s`, as part of a
+   `NetcatUDP` application and calls `s.sendto(b'...', '10.0.0.2', 1234)`.
+   It waits for a message in return and calls `s.recvfrom()`.
+   - There is now a service listening on 10.0.0.2 port 1234 to respond to the
+     UDP msg
+ - 8 seconds: Host `c` instantiates a `UDPSocket`, `s`, as part of a
+   `NetcatUDP` application and calls `s.sendto(b'...', '10.0.0.2', 1234)`.
+   It waits for a message in return and calls `s.recvfrom()`.
+   - There is a service listening on 10.0.0.2 port 1234 to respond to the
+     UDP msg
+
+
+## Instructions
+
+In the file `mysocket.py`, flesh out following the skeleton methods:
+
+ - `create_packet()`.  This method is used create a packet to be sent to a
+   remote host.  Use the `src`, `sport`, `dst`, `dport`, and `data` arguments
+   to create a UDP datagram with IP header, UDP header, and UDP payload (i.e.,
+   `data`).  The method should return a `bytes` instance that is ready to be
+   sent on the wire--after an Ethernet frame header is added.
+
+ - `send_packet()`.  This method is used to create and send a UDP datagram.  It
+   is what is called by `UDP.sendto()`.  Use the `remote_addr`, `remote_port`,
+   and `data` arguments to create and send an UDP datagram with IP header, UDP
+   header, and UDP payload (i.e., `data`).  Note that this function should
+   largely be implemented by calling `UDPHeader.create_packet()` and
+   `UDPHeader._send_ip_packet()`.
+
+ - `handle_packet()`.  This method takes the following as an argument:
+
+   - `pkt`: an IP packet, complete with IP header.  Generally, this could be
+     either an IPv4 or an IPv6 packet, but for the purposes of this lab, it
+     will just be IPv4.
+
+   The method should simply parse the packet, append the data to the socket's
+   buffer, along with the remote IP address and port from which it originated,
+   and call `self._notify_on_data()` to let the application know that there is
+   data to be read.  When the application calls `UDP.recvfrom()` it will return
+   the contents of the earliest received UDP datagram that has not been read.
+
+At this point, you should be able to run the following command to run scenario
+1:
+
+```
+$ cougarnet --disable-ipv6 --display --wireshark s1 scenario1.cfg
+```
+
+You have 5 seconds to select the `s1-b` interface before the UDP packet is sent
+by host `a`.  At this point, you should see a log message indicating that host
+`a` is sending the message, you should see that packet in your Wireshark
+output, and you should see a log message indicating that it was received by
+host `b`.  However, you should not expect to see a log message that it has been
+received by the application running on `b`.  Nor should you see a return packet
+in the Wireshark output.  That is because you are missing the transport-layer
+multiplexing--the glue that passes the incoming packets to their correct
+socket.
+
+In the file `transporthost.py`, flesh out following method:
+
+ - `handle_udp()`.  This method takes the following as an argument:
+
+   - `pkt`: an IP packet, complete with IP header.  Generally, this could be
+     either an IPv4 or an IPv6 packet, but for the purposes of this lab, it
+     will just be IPv4.
+
+   It is called by `handle_ip()` when the packet is determined to be a UDP
+   packet. `handle_udp()` should look for a open UDP socket corresponding to
+   the destination address and destination port of the incoming packet.  If
+   such a mapping is found, then the `handle_packet()` method is called on that
+   socket.  This is the one you fleshed out earlier!  See several examples of
+   where it is called for both client and server in `scenario1.py`.
+
+   If there is no mapping found, then call the `no_socket_udp()` method.  At
+   this point, you do not need to flesh out the `no_socket_udp()` method; it is
+   simply a placeholder.
+
+
+## Testing
+
+Test your implementation against scenario 1.  _After_ the service has been
+started, the output should show that `a` sent the UDP datagram and that `b`
+received the UDP datagram--both at the host level and the application levels
+(it will look a little redundant, but the loggint happens at both layers.  The
+output should also show that `a` received the echoed message, both at the host
+level and the application level.  After the exchange between hosts `a` and `b`,
+you should see output for a similar exchange between hosts `c` and `b`.
+
+When it is working properly, test also with the `--terminal=none` option:
+
+```
+$ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
+```
 
 
 # Part 3 - TCP Sockets and Three-Way Handshake
