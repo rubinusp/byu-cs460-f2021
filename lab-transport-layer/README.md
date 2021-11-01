@@ -354,7 +354,7 @@ listed.
 
  - 5 seconds: Host `a` instantiates a `UDPSocket`, `s`, as part of a
    `NetcatUDP` application and calls:
-   ```
+   ```python
    s.sendto(b'...', '10.0.0.2', 1234)
    ```
    - There is no service listening on 10.0.0.2 port 1234
@@ -362,7 +362,7 @@ listed.
    - There is now a service listening on 10.0.0.2 port 1234
  - 7 seconds: Host `a` instantiates a `UDPSocket`, `s`, as part of a
    `NetcatUDP` application and calls:
-   ```
+   ```python
    s.sendto(b'...', '10.0.0.2', 1234)
    ```
    It waits for a message in return and calls `s.recvfrom()`.
@@ -370,7 +370,7 @@ listed.
      UDP msg
  - 8 seconds: Host `c` instantiates a `UDPSocket`, `s`, as part of a
    `NetcatUDP` application and calls:
-   ```
+   ```python
    s.sendto(b'...', '10.0.0.2', 1234)
    ```
    It waits for a message in return and calls `s.recvfrom()`.
