@@ -5,7 +5,22 @@ transport layer, including the creation of IPv4, UDP, and TCP headers,
 transport-layer multiplexing, and the TCP three-way handshake.
 
 # Table of Contents
-TODO
+ - [Getting Started](#getting-started)
+   - [Update Cougarnet](#update-cougarnet)
+   - [Resources Provided](#resources-provided)
+   - [Topology](#topology)
+   - [Starter Commands](#starter-commands)
+ - [Part 1 - IPv4, UDP, and TCP Headers](#part-1---ipv4-udp-and-tcp-headers)
+   - [Instructions](#instructions)
+ - [Part 2 - UDP Sockets](#part-2---udp-sockets)
+   - [Packets Issued](#packets-issued)
+   - [Instructions](#instructions)
+   - [Testing](#testing)
+ - [Part 3 - TCP Sockets and Three-Way Handshake](part-3---tcp-sockets-and-three-way-handshake)
+   - [Packets Issued](#packets-issued-1)
+   - [Instructions](#instructions-1)
+   - [Testing](#testing-1)
+ - [Submission](#submission)
 
 
 # Getting Started
