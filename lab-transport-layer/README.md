@@ -16,7 +16,7 @@ transport-layer multiplexing, and the TCP three-way handshake.
    - [Packets Issued](#packets-issued)
    - [Instructions](#instructions)
    - [Testing](#testing)
- - [Part 3 - TCP Sockets and Three-Way Handshake](part-3---tcp-sockets-and-three-way-handshake)
+ - [Part 3 - TCP Sockets and Three-Way Handshake](#part-3---tcp-sockets-and-three-way-handshake)
    - [Packets Issued](#packets-issued-1)
    - [Instructions](#instructions-1)
    - [Testing](#testing-1)
