@@ -353,17 +353,26 @@ Each sub-bullet describes the purpose of the primary bullet under which it is
 listed.
 
  - 5 seconds: Host `a` instantiates a `UDPSocket`, `s`, as part of a
-   `NetcatUDP` application and calls `s.sendto(b'...', '10.0.0.2', 1234)`.
+   `NetcatUDP` application and calls:
+   ```
+   s.sendto(b'...', '10.0.0.2', 1234)
+   ```
    - There is no service listening on 10.0.0.2 port 1234
  - 6 seconds: Host `b` starts an instance of `EchoServerUDP` on port 1234
    - There is now a service listening on 10.0.0.2 port 1234
  - 7 seconds: Host `a` instantiates a `UDPSocket`, `s`, as part of a
-   `NetcatUDP` application and calls `s.sendto(b'...', '10.0.0.2', 1234)`.
+   `NetcatUDP` application and calls:
+   ```
+   s.sendto(b'...', '10.0.0.2', 1234)
+   ```
    It waits for a message in return and calls `s.recvfrom()`.
    - There is now a service listening on 10.0.0.2 port 1234 to respond to the
      UDP msg
  - 8 seconds: Host `c` instantiates a `UDPSocket`, `s`, as part of a
-   `NetcatUDP` application and calls `s.sendto(b'...', '10.0.0.2', 1234)`.
+   `NetcatUDP` application and calls:
+   ```
+   s.sendto(b'...', '10.0.0.2', 1234)
+   ```
    It waits for a message in return and calls `s.recvfrom()`.
    - There is a service listening on 10.0.0.2 port 1234 to respond to the
      UDP msg
