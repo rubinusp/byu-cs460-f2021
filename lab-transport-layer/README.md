@@ -684,8 +684,8 @@ When it is working properly, test also with the `--terminal=none` option, and
 make sure it works for both scenarios:
 
 ```
-$ cougarnet --native-apps=none --disable-ipv6 --terminal=none scenario1.cfg
-$ cougarnet --native-apps=none --disable-ipv6 --terminal=none scenario2.cfg
+$ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
+$ cougarnet --disable-ipv6 --terminal=none scenario2.cfg
 ```
 
 
