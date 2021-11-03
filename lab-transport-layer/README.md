@@ -20,6 +20,9 @@ transport-layer multiplexing, and the TCP three-way handshake.
    - [Packets Issued](#packets-issued-1)
    - [Instructions](#instructions-1)
    - [Testing](#testing-1)
+ - [Part 4 - ICMP Port Unreachable and TCP Reset (Extra Credit)](#part-4---icmp-port-unreachable-and-tcp-reset-extra-credit)
+   - [Instructions](#instructions-2)
+   - [Testing](#testing-2)
  - [General Helps](#general-helps)
  - [Submission](#submission)
 
