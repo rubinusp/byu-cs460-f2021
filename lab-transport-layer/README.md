@@ -594,6 +594,10 @@ In the file `mysocket.py`, flesh out following the skeleton methods:
    this method should largely be implemented by calling
    `TCPHeader.create_packet()` and `TCPHeader._send_ip_packet()`.
 
+ - `initiate_connection()`.  This method initiates the TCP handshake.  The
+   method should send a TCP packet with the `SYN` flag set and transition to
+   state `SYN_SENT`.
+
  - `handle_syn()`.  This method takes the following as an argument:
 
    - `pkt`: an IP packet, complete with IP header.  Generally, this could be
