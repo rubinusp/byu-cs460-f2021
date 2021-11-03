@@ -408,8 +408,8 @@ In the file `mysocket.py`, flesh out following the skeleton methods:
    data to be read.  When the application calls `UDP.recvfrom()` it will return
    the contents of the earliest received UDP datagram that has not been read.
 
-At this point, you should be able to run the following command to run scenario
-1:
+At this point, you should be able to run the following command to run
+scenario 1:
 
 ```bash
 $ cougarnet --disable-ipv6 --display --wireshark s1 scenario1.cfg
@@ -686,6 +686,99 @@ should see output for a similar exchange between hosts `c` and `b`.
 
 When it is working properly, test also with the `--terminal=none` option, and
 make sure it works for both scenarios:
+
+```
+$ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
+$ cougarnet --disable-ipv6 --terminal=none scenario2.cfg
+```
+
+
+# Part 4 - ICMP Port Unreachable and TCP Reset (Extra Credit)
+
+In Parts 2 and 3 you implemented transport-layer multiplexing, which guided an
+incoming packet to the appropriate socket on a host.  However, when a packet
+did not match any open sockets on the system, it was simply ignored.  This is
+considered a "stealthy" configuration.  An alternative is to let the remote
+host know that there is no open socket by either sending an ICMP Port
+Unreachable message or a TCP Reset.
+
+
+## Instructions
+
+Write the code for building and parsing an ICMP header.  Then send ICMP error
+messages and TCP Reset messages at the appropriate times and circumstances.
+
+
+### ICMP Message Header
+
+In the file `headers.py`, create a class `ICMPHeader` with both `from_bytes()`
+and `to_bytes()` methods, similar to those you created for IPv4 and TCP in
+Part 1.  A diagram of the ICMP header is below.  Please note that the diagram
+describing the IPv4 header is 32 bits (columns) wide.
+<table border="1">
+<tr>
+<th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th>
+<th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
+<th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th>
+<th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th><th>31</th></tr>
+<tr>
+<td colspan="8">Type</td>
+<td colspan="8">Code</td>
+<td colspan="16">ICMP header checksum</td></tr>
+</table>
+
+In the file `test_headers.py` create a method `test_icmp_header()`, which tests
+both the `ICMPHeader.to_bytes()` and `ICMPHeader.from_bytes()` methods.  Use
+the following `bytes` string as input to `from_bytes()` for testing:
+
+```python
+b'\x15\x02\x00\x00'
+```
+
+And use the following as arguments for instantiating an `ICMPHeader` instance
+for testing the `ICMPHeader.to_bytes()` method:
+
+ - type: 5
+ - code: 12
+ - checksum: 0
+
+Run the following to test your header-handling code:
+
+```bash
+python3 test_headers.py
+```
+
+or, alternatively:
+
+```bash
+python3 -m unittest test_headers.py
+```
+
+
+### ICMP Port Unreachable
+
+Whenever a UDP packet arrives for which there is no matching socket, return an
+ICMP message to the sender with the following characteristics:
+
+ - type: 3 (Destination unreachable)
+ - code: 3 (Destination port unreachable)
+ - checksum: 0
+ - payload: the UDP datagram that was received by the host, complete with its
+   original IP and UDP headers
+
+
+### TCP Reset
+
+When a TCP packet arrives for which there is no matching socket _or_ when a TCP
+packet reaches a socket in the `LISTEN` state, but the packet does not have the
+`SYN` flag set, return a TCP packet with only the `RST` flag set.
+
+
+## Testing
+
+Test your implementation against scenarios 1 and 2.  Where you previously
+received no response from the server after sending a packet that did not match
+any socket, you should now see responses from the server.
 
 ```
 $ cougarnet --disable-ipv6 --terminal=none scenario1.cfg
