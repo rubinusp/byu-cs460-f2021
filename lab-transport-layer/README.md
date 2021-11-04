@@ -717,8 +717,9 @@ messages and TCP Reset messages at the appropriate times and circumstances.
 
 In the file `headers.py`, create a class `ICMPHeader` with both `from_bytes()`
 and `to_bytes()` methods, similar to those you created for IPv4 and TCP in
-Part 1.  A diagram of the ICMP header is below.  Please note that the diagram
-describing the IPv4 header is 32 bits (columns) wide.
+Part 1.  A diagram of the ICMP header used for the Destination Unreachable type
+is below.  Please note that the diagram describing the IPv4 header is 32 bits
+(columns) wide.
 <table border="1">
 <tr>
 <th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th>
@@ -729,6 +730,8 @@ describing the IPv4 header is 32 bits (columns) wide.
 <td colspan="8">Type</td>
 <td colspan="8">Code</td>
 <td colspan="16">ICMP header checksum</td></tr>
+<tr><td colspan="32">Unused</td></tr>
+</table>
 </table>
 
 In the file `test_headers.py` create a method `test_icmp_header()`, which tests
@@ -736,7 +739,7 @@ both the `ICMPHeader.to_bytes()` and `ICMPHeader.from_bytes()` methods.  Use
 the following `bytes` string as input to `from_bytes()` for testing:
 
 ```python
-b'\x15\x02\x00\x00'
+b'\x15\x02\x00\x00\x00\x00\x00\x00'
 ```
 
 And use the following as arguments for instantiating an `ICMPHeader` instance
@@ -767,6 +770,7 @@ ICMP message to the sender with the following characteristics:
  - type: 3 (Destination unreachable)
  - code: 3 (Destination port unreachable)
  - checksum: 0
+ - unused: 0
  - payload: the UDP datagram that was received by the host, complete with its
    original IP and UDP headers
 
