@@ -275,7 +275,8 @@ wide.
    - `RST`
    - `SYN`
    - `FIN`
- - Window - the receive window advertised by the sending host
+ - Window - the receive window advertised by the sending host.  We will not be using
+   this field in the lab, but 64 is a reasonable value for this field nonetheless.
  - Checksum - The checksum of a pseudo IPv4 header.  For the purposes of this lab, we will
    not be calculating a TCP checksum, so 0 can be used here.
  - Urgent Pointer - Not used for this lab, so this field can always be 0.
