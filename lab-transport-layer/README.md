@@ -305,7 +305,7 @@ python3 -m unittest test_headers.py
 ```
 
 If you have made any changes to the code in `headers.py`, the tests will most
-likely fail.  That is because `headers.py` must be populated with the correct
+likely fail.  That is because `test_headers.py` must be populated with the correct
 _expected_ values.  Each place in which `correct_value` is assigned a
 placeholder value, that placeholder must be replaced with the correct value.
 Note that the correct values of `correct_value` for testing the `UDPHeader`
