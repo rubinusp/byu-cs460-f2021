@@ -107,9 +107,8 @@ script `tfo_echo.py` can be run both as an echo client and an echo server,
 depending on the presence of the `-l` option.  When the script is run with the
 `-f` option, TFO is used.
 
-Re-start your Wireshark capture.  Then run 
-
-On host `b`, run the following to start the echo server:
+Re-start your Wireshark capture.  Then run the following on host `b` to start
+the echo server:
 
 ```bash
 b$ python3 tfo_echo.py -l 5599
@@ -162,7 +161,7 @@ presence of the `-f` option):
 a$ python3 tfo_echo.py -f 10.0.0.2 5599 foobar
 ```
 
-For questions 5 - 9, answer the same questions as 1 - 4, but for the most
+For questions 5 - 8, answer the same questions as 1 - 4, but for the most
 recent test.
 
 Finally, run the following again:
@@ -171,10 +170,10 @@ Finally, run the following again:
 a$ python3 tfo_echo.py -f 10.0.0.2 5599 foobar
 ```
 
-For questions 10 - 13, answer the same questions as 1 - 4, but for the most
+For questions 9 - 12, answer the same questions as 1 - 4, but for the most
 recent test.
 
 Now, look in the `tfo_echo.py`, and answer the following question:
 
- 14. What key differences are involved in programming a TFO connection (vs. a
+ 13. What key differences are involved in programming a TFO connection (vs. a
      non-TFO TCP connection) from the perspective of the _client_.
