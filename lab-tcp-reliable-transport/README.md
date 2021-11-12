@@ -401,7 +401,7 @@ In the file `buffer.py`, flesh out the following methods for the
    {2024: b'def', 2027: b'ghi', 2033: b'mn'})
    ```
    
- - `get()` - This method takes no arguments.  It method retrieves the largest
+ - `get()` - This method takes no arguments.  It retrieves the largest
    set of contiguous (i.e., no "holes") bytes that have been received, starting
    with `base_seq`, eliminating any duplicates along the way.  It updates
    `base_seq` to the sequence number of the next segment expected.  It returns a
