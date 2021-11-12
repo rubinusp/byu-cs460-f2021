@@ -383,8 +383,14 @@ In the file `buffer.py`, flesh out the following methods for the
 
    There are holes in the data starting at sequence numbers 2021 and 2030.
    Thus, calling `get()` with the buffer in this state would result in a return
-   value of `(b'', 2021)` (actually, the second value in the tuple is undefined
-   if the data returned is of zero length.
+   value of:
+
+   ```
+   (b'', 2021)
+   ```
+
+   (Actually, the second value in the tuple is undefined if the data returned
+   is of zero length.)
 
    But when the following is called, the first hole is filled:
    
@@ -392,8 +398,13 @@ In the file `buffer.py`, flesh out the following methods for the
    buf.put(b'abc', 2021)
    ```
 
-   So now when `get()` is called again, the value returned is
-   `(b'abcdefghi', 2021)`.  At this point, the member values associated with
+   So now when `get()` is called again, the value returned is:
+
+   ```
+   (b'abcdefghi', 2021)
+   ```
+
+   At this point, the member values associated with
    the `TCPSendBuffer` instance are as follows:
 
    ```python
