@@ -280,7 +280,7 @@ of in-order bytes, suitable for an application to call `TCPSocket.recv()`.
 The following image illustrates the problem faced by receive buffer from the
 perspective of the `TCPSocket` class.
 
-![receivebuffer-chunks-white.cfg](receivebuffer-chunks-white.png)
+![receivebuffer-segments-white.cfg](receivebuffer-segments-white.png)
 
 It receives different segments of data, possible overlapping, possibly out of
 order, and possibly with holes in between.  Each segment has a starting
