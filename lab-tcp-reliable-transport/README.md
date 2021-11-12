@@ -285,24 +285,28 @@ perspective of the `TCPSocket` class.
 It receives different segments of data, possible overlapping, possibly out of
 order, and possibly with holes in between.  Each segment has a starting
 sequence number (i.e., from the `seq` field of the TCP header accompanying the
-segment) and a length. In the above example, segments `c1`, `c2`, `c3`, and
-`c4` begin with sequence numbers `seq1`, `seq2`, `seq3`, and `seq4`,
-respectively.  Segments `c1` and `c4` have length 3, and segments `c2` and `c3`
-have length 4.  Using their  sequence number and length, these segments can be
-stitched together with duplicate bytes removed, once all the bytes have been
-received.  For example, a byte-level representation of the receive buffer
-illustrated above is shown below:
+segment) and a length. In the above example, segments `c1`, `c3`, `c2`, and
+`c4` are received in that order, and they begin with sequence numbers `seq1`,
+`seq3`, `seq2`, and `seq4`, respectively.  Segments `c1` and `c4` have length
+3, and segments `c2` and `c3` have length 4.  Using their  sequence number and
+length, these segments can be stitched together, with duplicate bytes removed,
+once all the bytes have been received.  For example, a byte-level
+representation of the receive buffer illustrated above is shown below:
 
 ![receivebuffer-bytes-white.cfg](receivebuffer-bytes-white.png)
 
 A few things to note in this particular example:
  - The first three bytes (i.e., starting with `base_seq`) have not yet been
    received.
+ - Segment `c3` was received before segment `c2`, even though `seq2` comes
+   before `seq3`.
  - Segments `c2` and `c3` overlap by one byte, i.e., the byte at `seq3` has
    been received twice.
  - The three bytes immediately before `seq4` have not yet been received.
 
 As a result:
+ - Segment `c2` must eventually be put before segment `c3`, even though it
+   arrived first.
  - As soon as the segment(s) containing the first three bytes are received,
    filling the hole at the beginning, the series of bytes from `seq1` through
    up until the next set of missing bytes, i.e., those immediately preceding
