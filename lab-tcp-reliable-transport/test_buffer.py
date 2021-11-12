@@ -92,25 +92,25 @@ class TestBuffer(unittest.TestCase):
         buf = TCPReceiveBuffer(2021)
 
         # put three chunks in buffer
-        buf.put(b'def', 2024)
         buf.put(b'fghi', 2026)
+        buf.put(b'def', 2024)
         buf.put(b'mn', 2033)
         self.assertEqual(buf.buffer,
-                {2024: b'def', 2026: b'fghi', 2033: b'mn'})
+                {2024: b'def', 2027: b'ghi', 2033: b'mn'})
         self.assertEqual(buf.base_seq, 2021)
 
         # ignore a chunk starting with the same sequence number if the existing
         # chunk is longer
         buf.put(b'm', 2033)
         self.assertEqual(buf.buffer,
-                {2024: b'def', 2026: b'fghi', 2033: b'mn'})
+                {2024: b'def', 2027: b'ghi', 2033: b'mn'})
         self.assertEqual(buf.base_seq, 2021)
 
         # overwrite a chunk starting with the same sequence number if the
         # existing chunk is shorter
         buf.put(b'mno', 2033)
         self.assertEqual(buf.buffer,
-                {2024: b'def', 2026: b'fghi', 2033: b'mno'})
+                {2024: b'def', 2027: b'ghi', 2033: b'mno'})
         self.assertEqual(buf.base_seq, 2021)
 
         # try to get ready data; none is ready because initial bytes are
@@ -122,7 +122,7 @@ class TestBuffer(unittest.TestCase):
         # add missing data
         buf.put(b'abc', 2021)
         self.assertEqual(buf.buffer,
-                {2021: b'abc', 2024: b'def', 2026: b'fghi', 2033: b'mno'})
+                {2021: b'abc', 2024: b'def', 2027: b'ghi', 2033: b'mno'})
         self.assertEqual(buf.base_seq, 2021)
 
         # get ready data

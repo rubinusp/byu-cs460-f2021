@@ -338,14 +338,14 @@ In the file `buffer.py`, flesh out the following methods for the
    ```python
    buf = TCPReceiveBuffer(2021)
    buf.put(b'def', 2024)
-   buf.put(b'fghi', 2026)
    buf.put(b'mn', 2033)
    ```
 
    The segments might be stored in a dictionary in the instance variable
-   `buf.segments` like this:
+   `buffer` with the following value:
+
    ```python
-   {2024: b'def', 2026: b'fghi', 2033: b'mn'})
+   {2024: b'def', 2033: b'mn'})
    ```
    
    The following rules should be applied when adding segments to the receive
@@ -354,13 +354,49 @@ In the file `buffer.py`, flesh out the following methods for the
    - If a segment is received, and the sum of its starting sequence number plus
      its length (i.e., the sequence number following this segment) is less than
      or equal to`base_seq`, then ignore it.  It is old data.
+
+     For example, if `base_seq = 2021`, and a segment with sequence 2001 and
+     length 4 is received, it is discarded.
    - If a segment is received, and its starting sequence number is less than
      `base_seq`, but its length makes it extend to `base_seq` or beyond, then
      trim the first bytes off, so that it starts with `base_seq` and is stored
      in the dictionary accordingly.
+
+     For example, if `base_seq = 2021`, and data with sequence 2019 and length
+     3 is received, the first two bytes of the segment are discarded, the
+     remaining two bytes are given starting sequence 2021.
    - If a segment arrives with the same sequence number as another segment that
      has previously been received, keep only the segment that is the longest.
+   - After every segment is added, iterate through each segment in the buffer,
+     in order.  For each segment, consider the segment immediate preceding it.
+     If the length of the preceding segment makes it extend to the sequence of
+     the current segment or beyond, then trim the first bytes off of the
+     current segment, so that its new sequence number corresponds to the first
+     non-duplicate byte.  Use the updated sequence number to map the segment.
+     Don't forget to delete the old reference to the segment!
 
+     For example, if a segment exists in the buffer with sequence 2026 and
+     length 4, and a new segment is received with sequence 2024 and length 3,
+     then the reference to segment with sequence 2026 is removed, and it is
+     replaced with the segment starting with sequence 2027 consisting of the
+     last three bytes of what was previously segment with sequence 2026.
+
+   Consider the following example:
+
+   ```python
+   buf = TCPReceiveBuffer(2021)
+   buf.put(b'foo', 2001)
+   buf.put(b'fghi', 2026)
+   buf.put(b'def', 2024)
+   buf.put(b'mn', 2033)
+   ```
+
+   This results in the following value of `buf.buffer`:
+
+   ```python
+   {2024: b'def', 2027: b'ghi', 2033: b'mn'})
+   ```
+   
  - `get()` - This method takes no arguments.  It method retrieves the largest
    set of contiguous (i.e., no "holes") bytes that have been received, starting
    with `base_seq`, eliminating any duplicates along the way.  It updates
@@ -371,13 +407,17 @@ In the file `buffer.py`, flesh out the following methods for the
    after `put()` is called.  The idea is to check the buffer immediately after
    data has been received to see if any is ready to be put into the ready buffer.
 
-   For example, consider example above, wherein the `TCPReceiveBuffer` instance
-   has been populated thus:
+   To build the string of bytes to be returned, start with the segment that
+   starts with sequence `base_seq`, and append the data from each segment, in
+   sequence order, until there is a gap in the bytes.  Then update `base_seq`,
+   and return the sequence of bytes along with the previous value of `base_seq`.
+
+   For example, consider the following example:
 
    ```python
    buf = TCPReceiveBuffer(2021)
-   buf.put(b'def', 2024)
    buf.put(b'fghi', 2026)
+   buf.put(b'def', 2024)
    buf.put(b'mn', 2033)
    ```
 
@@ -409,7 +449,7 @@ In the file `buffer.py`, flesh out the following methods for the
 
    ```python
    base_seq = 2030
-   buffer = {2033: b'mno'}
+   buffer = {2033: b'mn'}
    ```
    
 
