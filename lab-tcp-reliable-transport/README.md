@@ -433,8 +433,8 @@ In the file `buffer.py`, flesh out the following methods for the
    (b'', 2021)
    ```
 
-   (Actually, the second value in the tuple is undefined if the data returned
-   is of zero length.)
+   Note that the sequence number returned should always be the value of
+   `base_seq`, before it is incremented in the `get()` method.
 
    But when the following is called, the first hole is filled:
    
