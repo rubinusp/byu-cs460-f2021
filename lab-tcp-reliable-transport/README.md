@@ -345,7 +345,7 @@ In the file `buffer.py`, flesh out the following methods for the
    `buffer` with the following value:
 
    ```python
-   {2024: b'def', 2033: b'mn'})
+   {2024: b'def', 2033: b'mn'}
    ```
    
    The following rules should be applied when adding segments to the receive
