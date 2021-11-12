@@ -9,7 +9,7 @@
    id="svg5"
    inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
    sodipodi:docname="receivebuffer-chunks.svg"
-   inkscape:export-filename="/Users/casey/VM Shared/receivebuffer-chunks.png"
+   inkscape:export-filename="/Users/casey/VM Shared/receivebuffer-segments.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -32,7 +32,7 @@
      inkscape:window-width="1260"
      inkscape:window-height="715"
      inkscape:window-x="0"
-     inkscape:window-y="221"
+     inkscape:window-y="193"
      inkscape:window-maximized="0"
      inkscape:current-layer="layer1">
     <inkscape:grid
@@ -106,13 +106,13 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.25;font-family:'Al Bayan';-inkscape-font-specification:'Al Bayan, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="11.984595"
-       y="65.225357"
+       x="86.890778"
+       y="37.403061"
        id="text20361"><tspan
          sodipodi:role="line"
          id="tspan20359"
-         x="11.984595"
-         y="65.225357">chunks</tspan></text>
+         x="86.890778"
+         y="37.403061">segments</tspan></text>
     <path
        id="path12479"
        style="fill:none;stroke:#000000;stroke-width:1.065"
@@ -342,49 +342,43 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.25;font-family:'Al Bayan';-inkscape-font-specification:'Al Bayan, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="38.384769"
-       y="39.187412"
+       x="49.726482"
+       y="50.39983"
        id="text33987"><tspan
          sodipodi:role="line"
          id="tspan33985"
-         x="38.384769"
-         y="39.187412">c1</tspan></text>
+         x="49.726482"
+         y="50.39983">c1</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.25;font-family:'Al Bayan';-inkscape-font-specification:'Al Bayan, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="70.638138"
-       y="70.991364"
+       x="85.983986"
+       y="83.162209"
        id="text34279"><tspan
          sodipodi:role="line"
          id="tspan34277"
-         x="70.638138"
-         y="70.991364">c2</tspan></text>
+         x="85.983986"
+         y="83.162209">c2</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.25;font-family:'Al Bayan';-inkscape-font-specification:'Al Bayan, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="102.44209"
-       y="54.844742"
+       x="118.31709"
+       y="66.48642"
        id="text34385"><tspan
          sodipodi:role="line"
          id="tspan34383"
-         x="102.44209"
-         y="54.844742">c3</tspan></text>
-    <circle
-       id="path34500"
-       style="fill:#000000;stroke:#000000;stroke-width:0.264583"
-       cx="104.21625"
-       cy="50.504433"
-       r="0.0062907767" />
+         x="118.31709"
+         y="66.48642">c3</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.25;font-family:'Al Bayan';-inkscape-font-specification:'Al Bayan, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="176.17421"
-       y="86.428558"
+       x="187.28656"
+       y="75.316048"
        id="text42884"><tspan
          sodipodi:role="line"
          id="tspan42882"
-         x="176.17421"
-         y="86.428558">c4</tspan></text>
+         x="187.28656"
+         y="75.316048">c4</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.065;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker31017)"
        d="M -5.2916667,31.749999 V 89.958332"
