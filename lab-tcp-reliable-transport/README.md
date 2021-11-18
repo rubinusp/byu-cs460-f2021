@@ -23,7 +23,6 @@ between TCP sockets connected over a TCP connection.
  - [Part 4 - Fast Retransmit](#part-4---fast-retransmit)
    - [Instructions](#instructions-3)
    - [Testing](#testing-3)
- - [General Helps](#general-helps)
  - [Submission](#submission)
 
 
