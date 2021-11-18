@@ -557,8 +557,8 @@ for you, in a version of `TransportHost` with a very basic implementation of
 `TransportHost.handle_tcp()` (see the
 [Transport-Layer Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-transport-layer)).
 
-This lab requires that you have the `TCPHeader` and `IPv4Header` classes
-fleshed out, as well as the `TCPSocket.create_packet()` and
+However, his lab requires that you have the `TCPHeader` and `IPv4Header`
+classes fleshed out, as well as the `TCPSocket.create_packet()` and
 `TCPSocket.send_packet()` methods, as directed in the
 [Transport-Layer Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-transport-layer)
 
@@ -567,7 +567,7 @@ is 1,000 bytes.  However, you can find that in the `mss` instance variable of
 the `TCPSocket` instance (i.e., you don't need to hardcode it).  The timeout
 interval for your `TCPSocket` class is always 1 second and is stored in the
 value of the `timeout` instance variable.  However, the
-`TCPSocket.start_timer()` and and `TCPSocket.cancel_timer()` have been
+`TCPSocket.start_timer()` and `TCPSocket.cancel_timer()` have been
 implemented for you.
 
 The book (and the TCP spec) mention a delayed acknowledgment.  You will not
