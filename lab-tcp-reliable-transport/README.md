@@ -16,8 +16,8 @@ between TCP sockets connected over a TCP connection.
  - [Part 2 - TCP Receive Buffer](#part-2---tcp-receive-buffer)
    - [Instructions](#instructions-1)
    - [Testing](#testing-1)
- - [Part 3 - TBD](#part-3)
- - [Part 4 - TBD](#part-4)
+ - [Part 3 - Reliable Delivery](#part-3---reliable-delivery)
+ - [Part 4 - Fast Retransmit](#part-4---fast-retransmit)
  - [General Helps](#general-helps)
  - [Submission](#submission)
 
@@ -45,16 +45,63 @@ The files given to you for this lab are the following:
  - `buffer.py` - a file containing a stub implementation of a TCP send and
    receive buffer.  This is where you will do your work.
  - `test_buffer.py` - a file containing unit tests, which will be used to test
-   your TCP buffer implementations.  You will also do your work here!
+   your TCP buffer implementations.
+ - `host.py` - a file containing a basic implementation of a host.  Note that
+   this is pared down version of the `Host` class you implemented in the
+   [Network-Layer Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-network-layer)
+   in which the `send_packet()` method simply picks an outgoing interface,
+   creates a frame with the broadcast address as its destination, and sends the
+   frame out the interface.
+ - `transporthost.py` - a file containing a stub implementation of a host with
+   transport-layer capabilities.  It inherits from `Host` and overrides the
+   `handle_udp()` and `handle_tcp()` methods.  You will also do your work here!
+ - `transporthost.py` - a file containing a basic implementation of a host that has transport-layer capabilities.  Note that
+   this is pared down version of the `TransportHost` class you implemented in the
+   [Transport-Layer Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-transport-layer)
+   in which the `handle_tcp()` simply expects a matching TCP connection to
+   exist and calls `handle_packet()` on the corresponding socket, a `TCPSocket`
+   instance.
  - `mysocket.py` - a file containing a stub code for a TCP socket.  You will
    also do your work here!
-   [network configuration files](https://github.com/cdeccio/cougarnet/blob/main/README.md#network-configuration-file)
+ - `scenario1.cfg` - a
+   [network configuration file](https://github.com/cdeccio/cougarnet/blob/main/README.md#network-configuration-file)
    for testing your implementation.
- - `scenario1.py` - a scripts that tests the functionality of your reliable
+ - `scenario1.py` - a script that tests the functionality of your reliable
    transport implementation.
 
 
+## Helpful Reading
+Read Section 3.5.4 ("Reliable Data Transfer") in the book.
+
 ## Topology
+
+The file `scenario1.cfg` describes a network topology in which hosts `a` and
+`b` are connected to each other via a single switch, `s1`.
+
+```
++----+
+| a  |
++----+
+  |
+  |
+  |
++----+
+| s1 |
++----+
+  |
+  |
+  |
++----+
+| b  |
++----+
+```
+
+`s1` has switching functionality already built in, and all hosts have the
+basic functionality of taking a packet, encapusulating in an Ethernet frame,
+and sending it to the appropriate host on its LAN/subnet.  Additionally,
+rudimentary transport-layer multiplexing functionality has been implemented for
+you.  What you will be adding is a reliable data channel for sending data
+between the two hosts, over an established connection.
 
 
 # Part 1 - TCP Send Buffer
@@ -124,7 +171,7 @@ In the file `buffer.py`, flesh out the following methods for the
 
  - `put()` - This method takes the following as an argument:
 
-   - `data`: raw bytes (`bytes`) to be send across a TCP connection.
+   - `data`: raw bytes (`bytes`) to be sent across a TCP connection.
 
    With this method data is added to the buffer.  This is called by
    `TCPSocket.send()`, such that all bytes are initially buffered and only sent
@@ -137,7 +184,7 @@ In the file `buffer.py`, flesh out the following methods for the
    buffer = b'abcdefg'
    last_seq = 1064
    ```
-   
+
    When `put(b'hijk')` is called, then those would be changed to the following:
 
    ```python
@@ -171,13 +218,13 @@ In the file `buffer.py`, flesh out the following methods for the
    base_seq = 1057
    next_seq = 1061
    ```
-   
+
    When `get(4)` is called, then those would be changed to the following:
 
    ```python
    buffer = b'abcdefghijk' # unchanged
-   base_seq = 1057 
-   next_seq = 1065 
+   base_seq = 1057
+   next_seq = 1065
    ```
 
    And the data returned would be: `(b'efgh', 1061)`
@@ -207,13 +254,13 @@ In the file `buffer.py`, flesh out the following methods for the
    base_seq = 1057
    next_seq = 1061
    ```
-   
+
    When `get_for_resend(4)` is called, then those would be changed to the following:
 
    ```python
    buffer = b'abcdefghijk' # unchanged
-   base_seq = 1057 
-   next_seq = 1065 
+   base_seq = 1057
+   next_seq = 1065
    ```
 
    And the data returned would be: `(b'abcd', 1057)`
@@ -232,14 +279,14 @@ In the file `buffer.py`, flesh out the following methods for the
    buffer = b'abcdefghijk'
    base_seq = 1057
    ```
-   
+
    When `slide(1061)` is called, then those would be changed to the following:
 
    ```python
    buffer = b'efghijk'
    base_seq = 1061
    ```
-   
+
 Also flesh out the following utility methods:
 
  - `bytes_not_yet_sent()` - return an `int` representing the number of
@@ -335,7 +382,7 @@ In the file `buffer.py`, flesh out the following methods for the
    only made available to the ready buffer when there is data at `base_seq`
    (i.e., no "hole" at the beginning).  The suggested implementation is to map
    incoming segments of data by sequence number in a dictionary.
-   
+
    For example, suppose a `TCPReceiveBuffer` instance, `buf` is initialized
    thus:
 
@@ -351,7 +398,7 @@ In the file `buffer.py`, flesh out the following methods for the
    ```python
    {2024: b'def', 2033: b'mn'}
    ```
-   
+
    The following rules should be applied when adding segments to the receive
    buffer:
 
@@ -400,7 +447,7 @@ In the file `buffer.py`, flesh out the following methods for the
    ```python
    {2024: b'def', 2027: b'ghi', 2033: b'mn'})
    ```
-   
+
  - `get()` - This method takes no arguments.  It retrieves the largest
    set of contiguous (i.e., no "holes") bytes that have been received, starting
    with `base_seq`, eliminating any duplicates along the way.  It updates
@@ -437,7 +484,7 @@ In the file `buffer.py`, flesh out the following methods for the
    `base_seq`, before it is incremented in the `get()` method.
 
    But when the following is called, the first hole is filled:
-   
+
    ```python
    buf.put(b'abc', 2021)
    ```
@@ -455,7 +502,7 @@ In the file `buffer.py`, flesh out the following methods for the
    base_seq = 2030
    buffer = {2033: b'mn'}
    ```
-   
+
 
 ## Testing
 
@@ -475,4 +522,313 @@ python3 -m unittest test_buffer.py
 ```
 
 
+# Part 3 - Reliable Delivery
+
+With a working sender buffer and receiver buffer, you can now create a working
+implementation of a reliable transport!
+
+First, note that you do not need to worry about connection setup--the
+`TCPSocket` objects are instantiated with a state of `ESTABLISHED`, as if the
+three-way handshake has already occurred.  A special method,
+`bypass_handshake()`, is called to initialize the initial sequence numbers of
+each side of the connection, in lieu of the three-way handshake.  This method
+also initializes the `TCPSendBuffer` and `TCPReceiveBuffer` instances
+associated with the `TCPSocket` instance, instance variables `send_buffer` and
+`receive_buffer`, respectively.
+
+Second, note that the `send()` and `recv()` methods are already implemented for
+you as well.  The `send()` method is the one that sets everything in motion!
+It is called by the application when it wants to reliably send data to its peer.
+It simply puts everything in `send_buffer` and then calls `send_if_possible()`
+to send what it can send immediately given the congestion window.  The `recv()`
+method simply pulls (up to) the requested number of bytes from `ready_buffer`,
+which is just a buffer of bytes (type `bytes`) that have been retrieved from
+`receive_buffer`; `receive_buffer` does all the heavy lifting of sorting and
+filling in gaps.
+
+Finally, the transport-layer multiplexing functionality has been implemented
+for you, in a version of `TransportHost` with a very basic implementation of
+`TransportHost.handle_tcp()` (see the
+[Transport-Layer Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-transport-layer)).
+
+This lab requires that you have the `TCPHeader` and `IPv4Header` classes
+fleshed out, as well as the `TCPSocket.create_packet()` and
+`TCPSocket.send_packet()` methods, as directed in the
+[Transport-Layer Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-transport-layer)
+
+A few words about TCP configuration parameters.  The Maximum Segment Size (MSS)
+is 1,000 bytes.  However, you can find that in the `mss` instance variable of
+the `TCPSocket` instance (i.e., you don't need to hardcode it).  The timeout
+interval for your `TCPSocket` class is always 1 second and is stored in the
+value of the `timeout` instance variable.  However, the
+`TCPSocket.start_timer()` and and `TCPSocket.cancel_timer()` have been
+implemented for you.
+
+The book (and the TCP spec) mention a delayed acknowledgment.  You will not
+implement a delayed acknowledgment in your implementation; yours will send an
+acknowledgement for every segment you receive.  Note that your acknowledgment
+may or may not acknowledge new data.
+
+
+## Instructions
+
+In the file `mysocket.py`, flesh out the following sender-side methods for the
+`TCPSocket` class.
+
+ - `send_if_possible()` - This method takes no arguments.  Basically, it just
+   grabs segments of data from its `TCPSendBuffer` instance, i.e., using
+   `send_buffer.get()`, no larger than MSS (stored in the `mss` instance var)
+   and sends them to the TCP peer (i.e., using the `send_packet()` method).  It
+   continues doing this until the number of outstanding bytes (i.e., those that
+   are "in-flight" or unacknowledged) exceeds the congestion window size.  Any
+   time a packet is sent, if the timer is not already set (i.e., the `timer`
+   instance variable is `None`), then it is set using the `start_timer()`
+   method, which has been implemented for you.
+
+   This method is called in two places: the `send()` method and the
+   `handle_ack()` method.  The `send()` method (called by an application) calls
+   `send_if_possible()` after it has buffered all the data in the
+   `send_buffer()`, so it can immediately send what is allowed by the
+   congestion window.  The `handle_ack()` method (called when a TCP packet with
+   the `ACK` flag set is received) calls `send_if_possible()` after new data
+   has been acknowledged.  This acknowledgment of new data results in a
+   "sliding" of the send window (i.e., by calling `slide()`), so more segments
+   can be sent.
+
+
+ - `handle_ack()` - This method takes the following as an argument:
+
+   - `pkt`: an IP packet, complete with IP header.  Generally, this could be
+     either an IPv4 or an IPv6 packet, but for the purposes of this lab, it
+     will just be IPv4.
+
+   With this method, bytes previously sent are acknowledged.  The method checks
+   the acknowledgment number in the TCP header and acknowledges any new data by
+   sliding the window (i.e., `send_buffer.slide()`).  It also cancels the timer
+   (i.e., using `cancel_timer()`, which has been implemented for you)  and
+   restarts it (i.e., using `start_timer()`) if there are still bytes outstanding.
+   This ensures that the timer is always associated with the oldest
+   unacknowledged segment.  Finally, it calls `send_if_possible()` to send any
+   segments that are allowed within the newly-slid window.
+
+   This method is called by the `TCPSocket.handle_packet()` method whenever a
+   packet is received in which the `ACK` flag is set.
+
+ - `retransmit()` - This method takes no arguments.  Its purpose is simply to
+   grab the oldest unacknowledged segment from the `TCPSendBuffer` instance,
+   `send_buffer()` and retransmit it.  After re-sending the segment, it
+   re-starts the timer, so the timer is always associated with the oldest
+   unacknowledged segment.
+
+   This method is called after a loss event--either after a timeout (i.e., as
+   scheduled by the timer) or a triple-duplicate ACK (i.e., discovered in
+   `handle_ack()`).
+
+In the file `mysocket.py`, flesh out the following receiver-side methods for
+the `TCPSocket` class.
+
+ - `handle_data()` - This method takes the following as an argument:
+
+   - `pkt`: an IP packet, complete with IP header.  Generally, this could be
+     either an IPv4 or an IPv6 packet, but for the purposes of this lab, it
+     will just be IPv4.
+
+   This method extracts the segment data from the packet as well as the
+   sequence number associated with that segment, from the TCP packet. The
+   segment data is put into the `TCPReceiveBuffer` instance, `receive_buffer`,
+   by calling `receive_buffer.put()`.  Then it calls `receive_buffer.get()` to
+   retrieve the longest contiguous set of bytes that results from receiving
+   the latest segment.  Any data retrieved is appended to the `ready_buffer`
+   instance variable of the `TCPSocket` instance.  A call to `TCPSocket.recv()`
+   (i.e., by the application) reads and returns data from `ready_buffer`.
+
+   Whenever TCP segment data is received, an acknowledgment should be sent.
+   That acknowledgment will always correspond to the next in-order byte
+   expected from the other side.  If there are holes in the data received, then
+   the acknowledgment will be a duplicate; otherwise it will be new.  See the
+   return value of `receive_buffer.get()`.
+
+   Finally, if new data has been added to the `ready_buffer`, then notify the
+   application by calling `self._notify_on_data()`.
+
+   This method is called by the `TCPSocket.handle_packet()` method whenever a
+   packet is received in which there is TCP payload data, i.e., a TCP segment.
+
+As you implement the TCP functionality in the methods above, you will find it
+helpful for each participant in the TCP connection to keep track of both the
+sequence number that corresponds to bytes that have been received by its peer
+and the sequence number that corresponds to bytes that have sent by its peer.
+The former is stored as the instance variable `seq`, and the latter is stored
+as the instance variable `ack`.  They are initialized as follows:
+
+```
+self.seq = self.base_seq_self + 1
+self.ack = self.base_seq_other + 1
+```
+
+They should be maintained in the methods that you have fleshed out above.
+In particular, `ack` should be updated every time a segment received yields new
+contiguous data (i.e., see `TCPReceiveBuffer.get()`).  Likewise, `seq` should
+be updated with the value of the acknowledgment field, every time new data is
+received.
+
+
+## Testing
+
+### No Loss
+
+First, test your TCP implementation to transfer the file `test.txt` over the
+TCP connection without any loss using a fixed congestion window size of 10,000
+bytes:
+
+```
+cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
+```
+
+You can also run Wireshark to see the action on the wire!
+
+```
+cougarnet --wireshark s1 --vars loss=0,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
+```
+
+The file should transfer in no more than a second or two, and it should be in
+tact:
+
+```
+$ sha1sum test.txt downloads/test.txt
+e742dc9de5bac34d82117e015f597378a205e5c1  test.txt
+e742dc9de5bac34d82117e015f597378a205e5c1  downloads/test.txt
+```
+
+(The former is the original file itself, and the latter is the transferred
+version.)
+
+When this is working, test on a larger file, `byu-y-mtn.jpg`:
+
+```
+cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
+```
+
+This one should transfer in roughly 12 seconds and should also be in tact:
+
+```
+$ sha1sum byu-y-mtn.jpg downloads/byu-y-mtn.jpg
+6d82cbd6949c0bb89a9071b821bb62ed73a462ff  byu-y-mtn.jpg
+6d82cbd6949c0bb89a9071b821bb62ed73a462ff  downloads/byu-y-mtn.jpg
+```
+
+Finally, transfer the image file again with a larger window size of 50,000
+bytes:
+
+```
+cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
+```
+
+The larger window should cut the transfer time down to about 5 seconds.
+
+
+### Some Loss
+
+Test your TCP implementation to transfer the file `test.txt` over the
+TCP connection with a 5% loss rate each direction:
+
+```
+cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
+```
+
+The file should still transfer properly (i.e., as shown by `sha1sum`), though
+it might take 10 - 15 seconds with the timeouts and retransmissions
+
+When this is working, test on a larger file, `byu-y-mtn.jpg`, with lower loss
+rate and larger congestion window:
+
+```
+cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
+```
+
+The file should still transfer properly (i.e., as shown by `sha1sum`), though
+it might take up to 60 seconds or more with the timeouts and retransmissions.
+
+
+## All Together
+
+When transmissions are working, with and without loss, make sure they are all
+working with the `--terminal=none` option:
+
+```
+cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=off --terminal=none scenario1.cfg
+cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
+cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
+cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=off --terminal=none scenario1.cfg
+cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
+```
+
+# Part 4 - Fast Retransmit
+
+Implement fast retransmit in your reliable delivery. This means that TCP
+detects a loss event when there are three duplicate ACKs (meaning the fourth
+acknowledgment in a row with the same value), and then immediately retransmits
+instead of waiting for the retransmission timer.  Do this only when the value
+of the `fast_retransmit` instance variable is `True`.  You should do this work
+in the `handle_ack()` method.  When fast retransmit is invoked, you do not need
+to do anything with the running timer.
+
+It is possible that more than four duplicate ACKs are received. These additional
+duplicates should be ignored. Fast retransmit should only be done once and not
+repeated until a new, larger acknowldgment is received.
+
+
+## Testing
+
+Test your fast retransmit functionality, but first running the tests without
+packet loss, to make sure they still work as expected:
+
+```
+cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=on --terminal=none scenario1.cfg
+cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
+cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
+```
+
+Running the tests with packet loss should result in faster transmission times:
+
+```
+cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=on scenario1.cfg
+cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on scenario1.cfg
+```
+
+Specifically, the file `test.txt` should transfer in no more than a second or
+two, and it should be in tact:
+
+```
+$ sha1sum test.txt downloads/test.txt
+e742dc9de5bac34d82117e015f597378a205e5c1  test.txt
+e742dc9de5bac34d82117e015f597378a205e5c1  downloads/test.txt
+```
+
+Likewise, the file `test.txt` should transfer in about 5 or 6 seconds, and it
+should be in tact:
+
+```
+$ sha1sum byu-y-mtn.jpg downloads/byu-y-mtn.jpg
+6d82cbd6949c0bb89a9071b821bb62ed73a462ff  byu-y-mtn.jpg
+6d82cbd6949c0bb89a9071b821bb62ed73a462ff  downloads/byu-y-mtn.jpg
+```
+
+Finally test with the `--terminal=none` option:
+
+```
+cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=on --terminal=none scenario1.cfg
+cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
+```
+
+
 # Submission
+
+Use the following commands to create a directory, place your working files in
+it, and tar it up:
+
+```bash
+$ mkdir tcp-lab
+$ cp buffer.py mysocket.py tcp-lab
+$ tar -zcvf tcp-lab.tar.gz tcp-lab
+```
