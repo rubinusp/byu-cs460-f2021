@@ -61,6 +61,8 @@ The files given to you for this lab are the following:
    in which the `handle_tcp()` simply expects a matching TCP connection to
    exist and calls `handle_packet()` on the corresponding socket, a `TCPSocket`
    instance.
+ - `test.txt` and `byu-y-mtn.jpg` - files that are to transferred from one host
+   to another to test your reliable transfer functionality.
  - `mysocket.py` - a file containing a stub code for a TCP socket.  You will
    also do your work here!
  - `scenario1.cfg` - a
