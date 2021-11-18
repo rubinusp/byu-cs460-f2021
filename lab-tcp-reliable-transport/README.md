@@ -9,6 +9,7 @@ between TCP sockets connected over a TCP connection.
  - [Getting Started](#getting-started)
    - [Update Cougarnet](#update-cougarnet)
    - [Resources Provided](#resources-provided)
+   - [Helpful Reading](#helpful-reading)
    - [Topology](#topology)
  - [Part 1 - TCP Send Buffer](#part-1---tcp-send-buffer)
    - [Instructions](#instructions)
@@ -17,7 +18,11 @@ between TCP sockets connected over a TCP connection.
    - [Instructions](#instructions-1)
    - [Testing](#testing-1)
  - [Part 3 - Reliable Delivery](#part-3---reliable-delivery)
+   - [Instructions](#instructions-2)
+   - [Testing](#testing-2)
  - [Part 4 - Fast Retransmit](#part-4---fast-retransmit)
+   - [Instructions](#instructions-3)
+   - [Testing](#testing-3)
  - [General Helps](#general-helps)
  - [Submission](#submission)
 
@@ -766,6 +771,8 @@ cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off --te
 ```
 
 # Part 4 - Fast Retransmit
+
+## Instructions
 
 Implement fast retransmit in your reliable delivery. This means that TCP
 detects a loss event when there are three duplicate ACKs (meaning the fourth
