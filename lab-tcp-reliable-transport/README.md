@@ -236,7 +236,7 @@ In the file `buffer.py`, flesh out the following methods for the
    And the data returned would be: `(b'efgh', 1061)`
 
 
- - `data_to_resend()` - This method takes the following as an argument:
+ - `get_for_resend()` - This method takes the following as an argument:
 
    - `size`: the number of bytes (`int`), at most, to be retrieved from the
      buffer.
@@ -249,8 +249,9 @@ In the file `buffer.py`, flesh out the following methods for the
    This is typically called after a loss event, such as timeout or
    triple-duplcate ACK.
 
-   Note that this method is very much like `get()`, with the major difference
-   being the _starting_ place of the bytes to be returned.
+   Note that this method is very much like `get()`, with the major differences
+   being 1) the _starting_ place of the bytes to be returned and 2) the fact
+   that `next_seq` is not changed after `get_for_resend()` is called.
 
    For example, suppose the following are the values associated with a
    `TCPSendBuffer` instance:
@@ -261,15 +262,9 @@ In the file `buffer.py`, flesh out the following methods for the
    next_seq = 1061
    ```
 
-   When `get_for_resend(4)` is called, then those would be changed to the following:
-
-   ```python
-   buffer = b'abcdefghijk' # unchanged
-   base_seq = 1057
-   next_seq = 1065
-   ```
-
-   And the data returned would be: `(b'abcd', 1057)`
+   When `get_for_resend(4)` is called, the return value would be:
+   `(b'abcd', 1057)`, and the values of `buffer`, `base_seq`, and `next_seq`
+   would remain unchanged.
 
  - `slide()` - This method takes the following as an argument:
 
