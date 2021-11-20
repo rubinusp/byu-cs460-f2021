@@ -778,7 +778,7 @@ to do anything with the running timer.
 
 It is possible that more than four duplicate ACKs are received. These additional
 duplicates should be ignored. Fast retransmit should only be done once and not
-repeated until a new, larger acknowldgment is received.
+repeated until a new, larger acknowledgment is received.
 
 
 ## Testing
