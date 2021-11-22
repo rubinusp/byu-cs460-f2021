@@ -88,7 +88,7 @@ class TestBuffer(unittest.TestCase):
         self.assertEqual(buf.bytes_not_yet_sent(), 0)
 
 
-    def test_send_buffer(self):
+    def test_receive_buffer(self):
         buf = TCPReceiveBuffer(2021)
 
         # put three chunks in buffer
