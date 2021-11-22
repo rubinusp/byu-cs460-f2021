@@ -808,7 +808,7 @@ e742dc9de5bac34d82117e015f597378a205e5c1  test.txt
 e742dc9de5bac34d82117e015f597378a205e5c1  downloads/test.txt
 ```
 
-Likewise, the file `test.txt` should transfer in about 5 or 6 seconds, and it
+Likewise, the file `byu-y-mtn.jpg` should transfer in about 5 or 6 seconds, and it
 should be in tact:
 
 ```
