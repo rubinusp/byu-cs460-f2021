@@ -825,6 +825,106 @@ cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --ter
 ```
 
 
+# Part 5 - TCP Tahoe (Extra Credit)
+
+## Instructions
+
+Add congestion control to your `TCPSocket` class by implementing TCP Tahoe.
+If (and only if) the `congestion_control` instance variable has a value of
+`tahoe`, have your implementation do the following:
+
+ - Slow start threshold. At the beginning of the connection, set `ssthresh` to
+   64000 bytes.  Every time there is a loss event, decrease slow start to half
+   of `cwnd`.
+
+ - Slow start. Every time the sender receives an acknowledgment for new data,
+   increment `cwnd` by the number of new bytes received (see note below).
+   Note that this will typically be equivalent to one MSS, but it is possible
+   for more than one MSS worth of data to be acknowledged (e.g., in the case
+   that a retransmitted segment is acknowledged along with later segments that
+   were received before the lost one was).
+
+ - Congestion Avoidance (Additive Increase).  When `cwnd` exceeds or equals
+   `ssthresh`, begin congestion avoidance with additive increase. Now every
+   time the sender receives an acknowledgment for new data, `cwnd` is
+   incremented by the `bytes_ackd*MSS/cwnd`, where `bytes_ackd` is the number
+   of new bytes acknowledged--again, typically one MSS (see the note below).
+
+ - Loss Event (Multiplicative Decrease).  When a loss event is detected (a
+   timeout or triple-duplicate ACK), then set `ssthresh` to half the value of
+   `cwnd` and set `cwnd` to one MSS.  In the case that half of `cwnd` is less
+   than the value of MSS, then set the threshold to one MSS instead.
+
+Note: Whether increasing or decreasing the value of `cwnd`, it should always be
+a multiple of MSS. Here is a hint for doing that.  Rather than directly
+incrementing `cwnd` directly, keep a separate variable, (e.g., `cwnd_inc`), and
+increment `cwnd_inc` by the appropriate amount.  Whenever `cwnd_inc` is greater
+than or equal to one MSS, then add one MSS to `cwnd` and decrease `cwnd_inc` by
+one MSS (you might do this multiple times in a row).  If there is a loss event,
+reset `cwnd_inc` to zero.
+
+Finally, when the TCP connection starts, the value of `cwnd` should always be
+one MSS.  However, you do not need to do that explicitly; it is already set for
+you with the value you pass to `window` on the command line, as seen in Part 3.
+
+
+## Testing
+
+The file `scenario2.cfg` is just like `scenario1.cfg` but additionally allows
+you to specify a congestion control algorithm on the command line, e.g.,
+`tahoe`.  Also, it gives you more time to begin packet capture on Wireshark.
+
+Run the following command to run the file transfer with no loss:
+
+```
+cougarnet -w s1 --vars loss=0,window=1000,file=byu-y-mtn.jpg,fast_retransmit=on,congestion_control=tahoe scenario2.cfg
+```
+
+Immediately begin a packet capture on interface `s1-a`.  When the file is done
+transmitting, select one of the packets in the capture window.  Then select
+"Statistics" from the Wireshark menu.  Then hover over "TCP Stream Graphs" in
+the menu that appears, and click on "Time Sequence (Stevens").  When the plot
+appears, you will probably need to click the "Switch Direction" button to get
+the correct view.  Click "zooms" next to "Mouse", and then highlight the
+rectangle between coordinates (0, 0) (the origin) and (1, 250,000) to zoom in
+on this region.  If you have implemented it properly, you should see the
+exponential growth associated with the slow start state (beginning at 0)
+followed by congestion avoidance (starting at around 0.8 seconds).  If you need
+a reminder of the meaning of the Time Sequence plot or whether or not it is
+showing correct behavior, refer to the
+[Transport-Layer Homework](https://github.com/cdeccio/byu-cs460-f2021/tree/master/hw-transport-layer)
+
+If everything looks good, click "Save As...", and save the file as
+`tahoe-noloss.png`.
+
+Now run the following command to test with 0.1% loss:
+
+```
+cougarnet -w s1 --vars loss=0.1,window=1000,file=byu-y-mtn.jpg,fast_retransmit=on,congestion_control=tahoe scenario2.cfg
+```
+
+Immediately begin a packet capture on interface `s1-a`.  When the file is done
+transmitting, select one of the packets in the capture window.  Then select
+"Statistics" from the Wireshark menu.  Hover over "TCP Stream Graphs" in
+the menu that appears.  This time click on "Window Scaling".  When the plot
+appears, you will probably need to click the "Switch Direction" button to get
+the correct view.  The Window Scaling plot shows the observed congestion window
+over time (Remember the only party that knows the actual value of `cwnd` is the
+sender).  You should see a sawtooth pattern in the observed window size, with
+periodic increases followed by drastic reductions to zero.  If you look
+closely, you should also be able to see the slow start and congestion avoidance
+phases, but they are harder to pick out in this plot (Note that you can also
+get a view of the Time Sequence graph of this data, by selecting it from the
+"Type" dropdown).
+
+If everything looks good, click "Save As...", and save the file as
+`tahoe-someloss.png`.  Make sure the image is of the Window Scaling graph, not
+the Time Sequence graph.
+
+Finally, make sure your implementation still works as expected with Parts
+[3](#testing-2) and [4](#testing-3).
+
+
 # Submission
 
 Use the following commands to create a directory, place your working files in
@@ -833,5 +933,14 @@ it, and tar it up:
 ```bash
 $ mkdir tcp-lab
 $ cp buffer.py mysocket.py tcp-lab
+$ tar -zcvf tcp-lab.tar.gz tcp-lab
+```
+
+If you have done Part 5, please use these commands to also include your image
+files.
+
+```bash
+$ mkdir tcp-lab
+$ cp buffer.py mysocket.py tahoe-noloss.png tahoe-someloss.png tcp-lab
 $ tar -zcvf tcp-lab.tar.gz tcp-lab
 ```

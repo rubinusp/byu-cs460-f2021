@@ -31,7 +31,8 @@ from buffer import TCPSendBuffer, TCPReceiveBuffer
 class TCPListenerSocket:
     def __init__(self, local_addr, local_port, handle_new_client_func,
             send_ip_packet_func, notify_on_data_func, event_loop,
-            fast_retransmit=False, initial_cwnd=1000, mss=1000):
+            fast_retransmit=False, initial_cwnd=1000, mss=1000,
+            congestion_control='none'):
 
         # These are all vars that are saved away for instantiation of TCPSocket
         # objects when new connections are created.
@@ -46,6 +47,7 @@ class TCPListenerSocket:
         self._fast_retransmit = fast_retransmit
         self._initial_cwnd = initial_cwnd
         self._mss = mss
+        self._congestion_control = congestion_control
 
     def handle_packet(self, pkt):
         ip_hdr = IPv4Header.from_bytes(pkt[:IP_HEADER_LEN])
@@ -60,7 +62,8 @@ class TCPListenerSocket:
                     notify_on_data_func=self._notify_on_data_func,
                     event_loop=self._event_loop,
                     fast_retransmit=self._fast_retransmit,
-                    initial_cwnd=self._initial_cwnd, mss=self._mss)
+                    initial_cwnd=self._initial_cwnd, mss=self._mss,
+                    congestion_control=self._congestion_control)
 
             self._handle_new_client(self._local_addr, self._local_port,
                     ip_hdr.src, tcp_hdr.sport, sock)
@@ -72,7 +75,8 @@ class TCPSocket:
     def __init__(self, local_addr, local_port,
             remote_addr, remote_port, state,
             send_ip_packet_func, notify_on_data_func, event_loop,
-            fast_retransmit=False, initial_cwnd=1000, mss=1000):
+            fast_retransmit=False, initial_cwnd=1000, mss=1000,
+            congestion_control='none'):
 
         # The local/remote address/port information associated with this
         # TCPConnection
@@ -107,6 +111,8 @@ class TCPSocket:
         # the largest in-order sequence number not yet received.
         self.ack = None
 
+        self.ssthresh = 64000
+
         # The maximum segment size (MSS), which represents the maximum number
         # of bytes that may be transmitted in a single TCP segment.
         self.mss = mss
@@ -114,6 +120,9 @@ class TCPSocket:
         # The congestion window (cwnd), which represents the total number of
         # bytes that may be outstanding (unacknowledged) at one time
         self.cwnd = initial_cwnd
+        self.cwnd_inc = self.cwnd
+
+        self.congestion_control = congestion_control
 
         # Send, receive, and ready buffers.  The send buffer is initialized
         # with our base sequence number.  The receive buffer is initialized
@@ -141,13 +150,15 @@ class TCPSocket:
     def connect(cls, local_addr, local_port,
             remote_addr, remote_port,
             send_ip_packet_func, notify_on_data_func, event_loop,
-            fast_retransmit=False, initial_cwnd=1000, mss=1000):
+            fast_retransmit=False, initial_cwnd=1000, mss=1000,
+            congestion_control='none'):
         sock = cls(local_addr, local_port,
                 remote_addr, remote_port,
                 TCP_STATE_CLOSED,
                 send_ip_packet_func, notify_on_data_func, event_loop,
                 fast_retransmit=fast_retransmit,
-                initial_cwnd=initial_cwnd, mss=mss)
+                initial_cwnd=initial_cwnd, mss=mss,
+                congestion_control=congestion_control)
 
         sock.initiate_connection()
 
