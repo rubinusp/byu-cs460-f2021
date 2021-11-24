@@ -924,8 +924,9 @@ If everything looks good, click "Save As...", and save the file as
 `tahoe-someloss.png`.  Make sure the image is of the Window Scaling graph, not
 the Time Sequence graph.
 
-Finally, make sure your implementation still works as expected with Parts
-[3](#testing-2) and [4](#testing-3).
+Finally, make sure that your files transferred correctly and that your
+implementation still works as expected with Parts [3](#testing-2) and
+[4](#testing-3).
 
 
 # Submission
