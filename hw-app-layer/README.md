@@ -121,12 +121,14 @@ questions.
 
  3. Close Firefox
 
+
 # Part 2 - TCP Fast Open
 
 This part is an exercise to help you understand TCP Fast Open (TFO).  The
 script `tfo_echo.py` can be run both as an echo client and an echo server,
 depending on the presence of the `-l` option.  When the script is run with the
 `-f` option (whther client or server), TFO is used.
+
 
 ## Getting Started
 
@@ -155,6 +157,7 @@ depending on the presence of the `-l` option.  When the script is run with the
     ```bash
     a$ python3 tfo_echo.py 10.0.0.2 5599 foobar
     ```
+
 
 ## Questions (1)
 
@@ -217,6 +220,7 @@ Finally, run the following again:
 a$ python3 tfo_echo.py -f 10.0.0.2 5599 foobar
 ```
 
+
 ## Questions (3)
 
 For questions 9 - 12, answer the same questions as 1 - 4, but for the most
@@ -225,3 +229,80 @@ recent test.
  13. Looking `tfo_echo.py`, what key differences are involved in programming a
      TFO connection (vs. a non-TFO TCP connection) from the perspective of the
      _client_.
+
+
+# Part 3 - SMTP
+
+This part is an exercise to help you understand SMTP.
+
+## Getting Started
+
+ 1. Start cougarnet.  File `h2-s1.cfg` contains a configuration file that
+    describes a network with two hosts, `a` and `b`, connected to switch `s1`.
+
+    Run the following command to create and start the network:
+
+    ```bash
+    cougarnet --display -w s1 h2-s1.cfg
+    ```
+
+ 2. Install swaks (Swiss Army Knife SMTP). Run the following to install swaks:
+    describes a network with two hosts, `a` and `b`, connected to switch `s1`.
+
+    ```
+    sudo apt install swaks
+    ```
+
+ 3. Begin Packet Capture.  Go to the open Wireshark window, click the "Capture
+    Options" button (the gear icon).  Select the `s1-a` interface for packet
+    capture.
+
+ 4. Start a "debugging" SMTP server on host `b`:
+
+    ```bash
+    b$ sudo python3 -m smtpd -n --class DebuggingServer 0.0.0.0:25
+    ```
+
+    This Python SMTP server simply interacts with clients over SMTP and prints
+    the messages it receives to standard output.
+
+ 5. Send a message.  On host `a`, execute the following to send an email
+    message from host `a` to host `b`:
+
+    ```
+    a$ swaks --server 127.0.0.1 --to joe@example.com
+    ```
+
+ 6. Send a message with attachment.  On host `a`, execute the following to send
+    an email message with an attachment from host `a` to host `b`:
+
+    ```
+    a$ swaks --server 127.0.0.1 --attach byu-y-mtn2.jpg --to joe@example.com
+    ```
+
+ 7. Follow TCP Streams.  For the emails sent in #5 and #6, open the
+    corresponding TCP stream by following the instructions below:
+
+    1. Find one of the frames that is part of the SMTP interaction.
+       Right-click on that frame and select "Follow", then "TCP Stream".  Leave
+       open the "Follow TCP Stream" window that is created.
+    2. Go back to the Wireshark capture window, and clear the display filter
+       (should say "tcp.stream eq 1" or the like).  Then go back to #1 for the
+       next email.
+
+## Questions
+
+Consider each of the emails sent above when answering the following questions.
+Use the TCP stream windows to help you understand and answer the questions.
+
+ 1. With SMTP, who initiates the SMTP conversation - client or server?
+ 2. What command does the client use to introduce itself?
+ 3. What command does the client use to send the actual email headers and
+    message body?
+ 4. How does the client indicate to the server that it is done sending the
+    email message?
+ 5. What numerical response codes did the server return for the `MAIL FROM`,
+    `RCPT TO`, `DATA`, and `QUIT` commands?
+ 6. Briefly describe the makeup of image attachment in the second email, as
+    seen "on the wire".
+ 7. What must the server do to display the image properly?
