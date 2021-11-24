@@ -576,6 +576,13 @@ may or may not acknowledge new data.
 
 ## Instructions
 
+Integrate the following code from your implementation of the
+[Transport Layer](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-transport-layer):
+
+ - The `TCPHeader` and `IPv4Header` classes from `headers.py`.
+ - The `TCPSocket.create_packet()` and `TCPSocket.send_packet()` methods from
+   `mysocket.py`.
+
 In the file `mysocket.py`, flesh out the following sender-side methods for the
 `TCPSocket` class.
 
