@@ -23,6 +23,9 @@ between TCP sockets connected over a TCP connection.
  - [Part 4 - Fast Retransmit](#part-4---fast-retransmit)
    - [Instructions](#instructions-3)
    - [Testing](#testing-3)
+ - [Part 5 - TCP Tahoe (Extra Credit)](#part-5---tcp-tahoe-extra-credit)
+   - [Instructions](#instructions-4)
+   - [Testing](#testing-4)
  - [Submission](#submission)
 
 
