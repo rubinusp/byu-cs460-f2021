@@ -133,7 +133,7 @@ class SimHostA(SimHost):
                 self.send_packet, event_loop, self.log)
 
         self.install_socket_tcp('10.0.0.1', A_PORT, '10.0.0.2', B_PORT, app.sock)
-        event_loop.schedule_event(3, app.send_file)
+        event_loop.schedule_event(6, app.send_file)
 
 class SimHostB(SimHost):
     def schedule_items(self, event_loop, window, fast_retransmit, filename):
@@ -144,7 +144,7 @@ class SimHostB(SimHost):
                 self.send_packet, event_loop, self.log)
 
         self.install_socket_tcp('10.0.0.2', B_PORT, '10.0.0.1', A_PORT, app.sock)
-        event_loop.schedule_event(2, app.prepare_to_receive)
+        event_loop.schedule_event(5, app.prepare_to_receive)
 
 
 def main():
