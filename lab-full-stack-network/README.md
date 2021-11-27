@@ -277,7 +277,7 @@ execute successfully.
 
  - Copy the `buffers.py` file containing the working implementation of the
    `TCPSendBuffer` and `TCPReceiveBuffer` classes that you created in the
-   [Transport Layer Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-tcp-reliable-transport).
+   [TCP Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-tcp-reliable-transport).
    to `buffer.py`.
  - Integrate your TCP implementation from the `TCPSocket` class into
    the `mysocket.py` file, using the `mysocket.py` you created in the
