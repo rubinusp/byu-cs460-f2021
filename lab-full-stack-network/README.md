@@ -13,6 +13,12 @@ and communicate over that path from socket to socket, process to process.
    - [Resources Provided](#resources-provided)
    - [Topology](#topology)
  - [Instructions](#instructions)
+   - [Handle Subnet-Level Broadcasts](#handle-subnet-level-broadcasts)
+   - [Integrate Forwarding Table](#integrate-forwarding-table)
+   - [Integrate UDP Socket Functionality](#integrate-udp-socket-functionality)
+   - [Route Prefixes Instead of IP Addresses](#route-prefixes-instead-of-ip-addresses)
+   - [Integrate TCP Socket Functionality](#integrate-tcp-socket-functionality)
+   - [Integrate Layer-2 Switching](#integrate-layer-2-switching)
  - [Submission](#submission)
 
 
