@@ -19,6 +19,7 @@ and communicate over that path from socket to socket, process to process.
    - [Route Prefixes Instead of IP Addresses](#route-prefixes-instead-of-ip-addresses)
    - [Integrate TCP Socket Functionality](#integrate-tcp-socket-functionality)
    - [Integrate Layer-2 Switching](#integrate-layer-2-switching)
+ - [Testing](#testing)
  - [Submission](#submission)
 
 
@@ -333,6 +334,7 @@ The scripts associated with this configuration do the following:
    [Link Layer Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-link-layer).
    to `switch.py`.
 
+
 With your own switch in place, you are now ready to test the functionality of
 the network stack that you created, piece by piece.  Run the following:
 
@@ -343,6 +345,26 @@ $ cougarnet --disable-ipv6 scenario5.cfg
 The behavior associated with `scenario5.cfg` is exactly the same as that of
 `scenario4.cfg`, with one exception: `scenario5.cfg` uses your switch
 implementation.  Thus, it should behave in exactly the same way.
+
+
+# Testing
+
+`scenario5.cfg` is the one that will ultimately be used to test your full-stack
+network implementation.  Make sure it works with the `--terminal=none` option:
+
+```bash
+$ cougarnet --disable-ipv6 --terminal=none scenario5.cfg
+```
+
+If you would like to test against a configuration that has all but the routing
+component, you can use the following:
+
+```bash
+$ cougarnet --disable-ipv6 --terminal=none scenario5-norouting.cfg
+```
+
+You can submit that code that works against `scenario5-norouting.cfg` for
+lesser credit.
 
 
 # Submission
