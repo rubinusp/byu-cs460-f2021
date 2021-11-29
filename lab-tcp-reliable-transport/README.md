@@ -693,13 +693,13 @@ TCP connection without any loss using a fixed congestion window size of 10,000
 bytes:
 
 ```
-cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
+$ cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
 ```
 
 You can also run Wireshark to see the action on the wire!
 
 ```
-cougarnet --wireshark s1 --vars loss=0,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
+$ cougarnet --wireshark s1 --vars loss=0,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
 ```
 
 The file should transfer in no more than a second or two, and it should be in
@@ -717,7 +717,7 @@ version.)
 When this is working, test on a larger file, `byu-y-mtn.jpg`:
 
 ```
-cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
+$ cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
 ```
 
 This one should transfer in roughly 12 seconds and should also be in tact:
@@ -732,7 +732,7 @@ Finally, transfer the image file again with a larger window size of 50,000
 bytes:
 
 ```
-cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
+$ cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
 ```
 
 The larger window should cut the transfer time down to about 5 seconds.
@@ -744,7 +744,7 @@ Test your TCP implementation to transfer the file `test.txt` over the
 TCP connection with a 5% loss rate each direction:
 
 ```
-cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
+$ cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=off scenario1.cfg
 ```
 
 The file should still transfer properly (i.e., as shown by `sha1sum`), though
@@ -754,7 +754,7 @@ When this is working, test on a larger file, `byu-y-mtn.jpg`, with lower loss
 rate and larger congestion window:
 
 ```
-cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
+$ cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off scenario1.cfg
 ```
 
 The file should still transfer properly (i.e., as shown by `sha1sum`), though
@@ -767,11 +767,11 @@ When transmissions are working, with and without loss, make sure they are all
 working with the `--terminal=none` option:
 
 ```
-cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=off --terminal=none scenario1.cfg
-cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
-cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
-cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=off --terminal=none scenario1.cfg
-cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
+$ cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=off --terminal=none scenario1.cfg
+$ cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
+$ cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
+$ cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=off --terminal=none scenario1.cfg
+$ cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=off --terminal=none scenario1.cfg
 ```
 
 # Part 4 - Fast Retransmit
@@ -797,16 +797,16 @@ Test your fast retransmit functionality, but first running the tests without
 packet loss, to make sure they still work as expected:
 
 ```
-cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=on --terminal=none scenario1.cfg
-cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
-cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
+$ cougarnet --vars loss=0,window=10000,file=test.txt,fast_retransmit=on --terminal=none scenario1.cfg
+$ cougarnet --vars loss=0,window=10000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
+$ cougarnet --vars loss=0,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
 ```
 
 Running the tests with packet loss should result in faster transmission times:
 
 ```
-cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=on scenario1.cfg
-cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on scenario1.cfg
+$ cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=on scenario1.cfg
+$ cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on scenario1.cfg
 ```
 
 Specifically, the file `test.txt` should transfer in no more than a second or
@@ -830,8 +830,8 @@ $ sha1sum byu-y-mtn.jpg downloads/byu-y-mtn.jpg
 Finally test with the `--terminal=none` option:
 
 ```
-cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=on --terminal=none scenario1.cfg
-cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
+$ cougarnet --vars loss=5,window=10000,file=test.txt,fast_retransmit=on --terminal=none scenario1.cfg
+$ cougarnet --vars loss=1,window=50000,file=byu-y-mtn.jpg,fast_retransmit=on --terminal=none scenario1.cfg
 ```
 
 
@@ -887,7 +887,7 @@ you to specify a congestion control algorithm on the command line, e.g.,
 Run the following command to run the file transfer with no loss:
 
 ```
-cougarnet -w s1 --vars loss=0,window=1000,file=byu-y-mtn.jpg,fast_retransmit=on,congestion_control=tahoe scenario2.cfg
+$ cougarnet -w s1 --vars loss=0,window=1000,file=byu-y-mtn.jpg,fast_retransmit=on,congestion_control=tahoe scenario2.cfg
 ```
 
 Immediately begin a packet capture on interface `s1-a`.  When the file is done
@@ -910,7 +910,7 @@ If everything looks good, click "Save As...", and save the file as
 Now run the following command to test with 0.1% loss:
 
 ```
-cougarnet -w s1 --vars loss=0.1,window=1000,file=byu-y-mtn.jpg,fast_retransmit=on,congestion_control=tahoe scenario2.cfg
+$ cougarnet -w s1 --vars loss=0.1,window=1000,file=byu-y-mtn.jpg,fast_retransmit=on,congestion_control=tahoe scenario2.cfg
 ```
 
 Immediately begin a packet capture on interface `s1-a`.  When the file is done
