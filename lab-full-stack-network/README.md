@@ -316,7 +316,7 @@ The scripts associated with this configuration do the following:
    output any messages that it receives from its TCP peer.
  - At 13 seconds, host `a` uses its `NetcatTCP` instance to send a message to
    the `EchoServerTCP`.  Host `a` should receive the response and print it out
-   to standard output.  A log of this interaction should show up on the console
+   to standard output.  A log of this interaction should show up on the console.
    Also, because of ARP and switching, the only hosts that should be seeing
    packets associated with the TCP connection are `a` and `d`.
  - At 14 and 15 seconds, host `b` launches its own `NetcatTCP` instance and
