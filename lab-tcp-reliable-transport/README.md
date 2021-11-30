@@ -599,7 +599,7 @@ In the file `mysocket.py`, flesh out the following sender-side methods for the
    This method is called in two places: the `send()` method and the
    `handle_ack()` method.  The `send()` method (called by an application) calls
    `send_if_possible()` after it has buffered all the data in the
-   `send_buffer()`, so it can immediately send what is allowed by the
+   `send_buffer`, so it can immediately send what is allowed by the
    congestion window.  The `handle_ack()` method (called when a TCP packet with
    the `ACK` flag set is received) calls `send_if_possible()` after new data
    has been acknowledged.  This acknowledgment of new data results in a
@@ -627,7 +627,7 @@ In the file `mysocket.py`, flesh out the following sender-side methods for the
 
  - `retransmit()` - This method takes no arguments.  Its purpose is simply to
    grab the oldest unacknowledged segment from the `TCPSendBuffer` instance,
-   `send_buffer()` and retransmit it.  After re-sending the segment, it
+   `send_buffer`, and retransmit it.  After re-sending the segment, it
    re-starts the timer, so the timer is always associated with the oldest
    unacknowledged segment.
 
