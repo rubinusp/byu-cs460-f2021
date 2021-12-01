@@ -8,19 +8,19 @@ application-layer protocols such as HTTP, DNS, and SMTP.
 
 ## Getting Started
 
- 1. Backup and Modify `/etc/hosts.txt`.
+ 1. Backup and Modify `/etc/hosts`.
 
-    First, backup your `/etc/hosts.txt` by creating a copy of it at
-    `/etc/hosts.txt.bak`:
+    First, backup your `/etc/hosts` by creating a copy of it at
+    `/etc/hosts.bak`:
  
     ```
-    sudo cp -pr /etc/hosts.txt{,.bak}
+    sudo cp -pr /etc/hosts{,.bak}
     ```
 
-    Now open `/etc/hosts.txt` with root privileges, e.g.:
+    Now open `/etc/hosts` with root privileges, e.g.:
 
     ```
-    sudo -e /etc/hosts.txt
+    sudo -e /etc/hosts
     ```
 
     Modify the first line so it looks like this:
@@ -111,10 +111,10 @@ questions.
 
 ## Cleanup
 
- 1. Revert to your backup of `/etc/hosts.txt`:
+ 1. Revert to your backup of `/etc/hosts`:
 
     ```
-    sudo mv /etc/hosts.txt{.bak,}
+    sudo mv /etc/hosts{.bak,}
     ```
 
  2. Close Wireshark.
