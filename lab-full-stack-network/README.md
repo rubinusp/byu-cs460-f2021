@@ -101,17 +101,8 @@ with native switches).
    then simply use the broadcast MAC address (ff:ff:ff:ff:ff:ff) as the
    destination MAC address.
 
-To test your functionality, you can run the following:
-
-```
-$ cougarnet --disable-ipv6 scenario1.cfg
-```
-
-At five seconds, a single ICMP packet is sent from host `a` to the broadcast IP
-address for the subnet, i.e., 10.0.0.255.  You should see output that it is
-received by all other hosts on the subnet/VLAN, and you should _not_ see output
-that it has been treated as a packet to be ignored or forwarded (i.e., "not my
-packet").
+You can test your functionality after adding your forwarding table
+implementation in the next step.
 
 
 ## Integrate Forwarding Table
@@ -137,7 +128,23 @@ updated for use with this lab.  Specifically:
    the behavior of the `ForwardingTableNative` class you interfaced with in the
    [Routing Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-routing).
 
-To test your functionality, you can run the following:
+
+To test the functionality of subnet-level broadcasts with the help of your
+forwarding table, you can run the following:
+
+```
+$ cougarnet --disable-ipv6 scenario1.cfg
+```
+
+At five seconds, a single ICMP packet is sent from host `a` to the broadcast IP
+address for the subnet, i.e., 10.0.0.255.  You should see output that it is
+received by all other hosts on the subnet/VLAN, and you should _not_ see output
+that it has been treated as a packet to be ignored or forwarded (i.e., "not my
+packet").
+
+
+To test the functionality of your forwarding table more generally, you can run
+the following:
 
 ```bash
 $ cougarnet --disable-ipv6 scenario2.cfg
