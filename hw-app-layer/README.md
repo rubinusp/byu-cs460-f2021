@@ -270,14 +270,14 @@ This part is an exercise to help you understand SMTP.
     message from host `a` to host `b`:
 
     ```
-    a$ swaks --server 127.0.0.1 --to joe@example.com
+    a$ swaks --server 10.0.0.2 --to joe@example.com
     ```
 
  6. Send a message with attachment.  On host `a`, execute the following to send
     an email message with an attachment from host `a` to host `b`:
 
     ```
-    a$ swaks --server 127.0.0.1 --attach byu-y-mtn2.jpg --to joe@example.com
+    a$ swaks --server 10.0.0.2 --attach byu-y-mtn2.jpg --to joe@example.com
     ```
 
  7. Follow TCP Streams.  For the emails sent in #5 and #6, open the
