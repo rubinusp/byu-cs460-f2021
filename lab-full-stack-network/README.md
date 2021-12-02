@@ -50,7 +50,7 @@ and one interface of router `r1` are all connected via two switches, `s1` and
 another VLAN.  Therefore, you should expect no link-layer activity between `a`
 and `c`, for example.  Routers `r1`, `r2`, `r3`, and `r4` are directly
 connected to one another, in that order.  Finally host `d` is connected to
-router `r4`, in another LAN.
+router `r4` via switch `s3`, in another LAN.
 
 ![net.cfg](net.png)
 
