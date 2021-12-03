@@ -214,7 +214,13 @@ recent test.
 
 ## Using TFO
 
-Finally, run the following again:
+Finally, restart the server on host `b` with the following command:
+
+```bash
+b$ python3 tfo_echo.py -f -l 5599
+```
+
+Then run the following again:
 
 ```bash
 a$ python3 tfo_echo.py -f 10.0.0.2 5599 foobar
