@@ -198,7 +198,7 @@ The commands should execute successfully.
  - In the
    [Routing Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-routing).
    each router announced its IP addresses (i.e., in the DV), such that each
-   learned the shortest distance (and next hop) associated for a set of IP
+   learned the shortest distance (and next hop) associated with a set of IP
    addresses--or /32 networks.  This was to simplify implementation and to
    avoid dependency on ARP.  However, in a more realistic scenario, prefixes
    (i.e., with more than one IP address) are announced instead.
@@ -223,11 +223,11 @@ The commands should execute successfully.
    It might seem confusing that prefix 10.0.100.0/30 originates from two
    different routers, specifically `r1` and `r2`.  To help explain this
    apparent discrepancy, remember that the goal of routing is not to get a
-   packet to the destination host but to get the packet to the router that has
-   in interface in the same LAN as the destination.  So whether a packet
-   destined for 10.0.100.1 arrives at `r1` or `r2`, it doesn't matter.  Both
-   routers have an interface in 10.0.100.0/30 and thus can use ARP and Ethernet
-   to get the packet to its final destination.
+   packet to the destination _host_ but to get the packet to the router that has
+   in interface in the same _subnet_ or _LAN_ as the destination.  So whether a
+   packet destined for 10.0.100.1 arrives at `r1` or `r2`, it doesn't matter;
+   both routers have an interface in 10.0.100.0/30 and thus can use ARP and
+   Ethernet to get the packet to its final destination.
 
    The next question is how to create the prefix from the IP address.
    This is really just the first "address" in the prefix.  That means that it
