@@ -62,11 +62,11 @@ application-layer protocols such as HTTP, DNS, and SMTP.
     following requests, one after the other:
 
     1. `http://bar.com:8000/cgi-bin/test.cgi`
-    2. `http://bar.com:8000/cgi-bin/test.cgi` (a second time)
+    2. `http://bar.com:8000/cgi-bin/test.cgi` (a second time - you might need to click the reload button)
     3. `http://foo.bar.com:8000/cgi-bin/test.cgi`
     4. `http://bar.net:8000/cgi-bin/test.cgi`
     5. `http://bar.com:8000/test.txt`
-    6. `http://bar.com:8000/test.txt` (a second time)
+    6. `http://bar.com:8000/test.txt` (a second time - you might need to click the reload button)
 
  6. "Update" `test.txt`, and re-request it.  Run the following command:
 
@@ -74,7 +74,7 @@ application-layer protocols such as HTTP, DNS, and SMTP.
 
     Then re-request the following URL:
 
-    7. `http://bar.com:8000/test.txt` (a third time)
+    7. `http://bar.com:8000/test.txt` (a third time - you might need to click the reload button)
 
  7. Follow TCP Streams.  For each of the URLs requested in #5 and #6, open the
     corresponding TCP stream by following the instructions below:
