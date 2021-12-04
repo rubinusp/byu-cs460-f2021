@@ -162,16 +162,10 @@ $ cougarnet --disable-ipv6 scenario2.cfg
 
 With this configuration, routers `r1` through `r4` run your implementation for
 forwarding table lookups and forwarding, but they get their entries from the
-configuration files, not from routing.  Hosts `a` through `d` are running in
-"native apps" mode, so you can run commands like `ping`.  With the scenario
-running, run the following from host `a` to test end-to-end connectivity:
-
-```bash
-a$ ping b
-a$ ping d
-```
-
-The commands should execute successfully.
+configuration files, not from routing.  After 4 seconds, host `a` will send
+an ICMP echo request to `d`, and after 5 seconds, host `d` will, in turn,
+send an ICMP echo request (not response) to `a`.  The main console should show
+that each of these was received by the destination.
 
 
 ## Integrate UDP Socket Functionality
@@ -283,16 +277,11 @@ $ cougarnet --disable-ipv6 scenario3.cfg
 With this configuration, routers `r1` through `r4` run your implementation for
 forwarding table lookups and forwarding, and their forwarding entries are
 created from DV routing.  Also, the routers are passing UDP packets using
-sockets that you have implemented.  Hosts `a` through `d` are running in
-"native apps" mode, so you can run commands like `ping`.  With the scenario
-running, run the following from host `a` to test end-to-end connectivity:
-
-```bash
-a$ ping d
-```
-
-Within a few seconds (i.e., after routes have propagated), the command should
-execute successfully.
+sockets that you have implemented.  After 10 seconds (allowing some time for
+the routes to propagate), host `a` will send an ICMP echo request to `d`, and
+after 11 seconds, host `d` will, in turn, send an ICMP echo request (not
+response) to `a`.  The main console should show that each of these was received
+by the destination.
 
 
 ## Integrate TCP Socket Functionality
