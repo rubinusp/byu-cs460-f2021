@@ -71,6 +71,16 @@ with native switches).
 
 ## Handle Subnet-Level Broadcasts
 
+ - Integrate your implementations of the `Host` methods into `host.py`, using
+   the `host.py` you created in the
+   [Network Layer Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-network-layer).
+   
+   It is important that you integrate your code in the newer file,
+   rather than simply overwriting the existing `host.py`; the existing file has been
+   updated for use with this lab.  Specifically, `host.py` contains a `main()`
+   function, such that a hhost running it functions like a router that forwards
+   packets, but has only statically configured routes (as opposed to using a routing
+   protocol.
  - Copy the `host.py` file containing the working implementation of the `Host`
    class that you created in the
    [Network Layer Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-network-layer).
