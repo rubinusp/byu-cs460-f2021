@@ -78,8 +78,8 @@ with native switches).
    It is important that you integrate your code in the newer file,
    rather than simply overwriting the existing `host.py`; the existing file has been
    updated for use with this lab.  Specifically, `host.py` contains a `main()`
-   function, such that a hhost running it functions like a router that forwards
-   packets, but has only statically configured routes (as opposed to using a routing
+   function, such that a host running it functions like a router that forwards
+   packets, but has only statically-configured routes (as opposed to using a routing
    protocol.
  - Copy the `host.py` file containing the working implementation of the `Host`
    class that you created in the
@@ -199,11 +199,15 @@ The commands should execute successfully.
 
    It is important that you integrate your code in the newer file, rather than
    simply overwriting the existing file; the existing file has been updated for
-   use with this lab.  Specifically, the `DVRouter` class now inherits from the
-   `TransportHost` class because it uses instances of `UDPSocket` to send and
-   receive DV message with other routers.  That does not affect the way you
-   called the helper method that you used previously, `_send_msg()`; its
-   arguments are the same.
+   use with this lab.  Specifically:
+   - The `DVRouter` class now inherits from the `TransportHost` class because it
+     uses instances of `UDPSocket` to send and receive DV message with other
+     routers.  That does not affect the way you called the helper method that you
+     used previously, `_send_msg()`; its arguments are the same.
+   - The file `dvrouter.py` contains a `main()` function, such that a host
+     running it functions like a router that forwards packets, and uses DV to
+     learn routes and update forwarding tables.
+
 
  - In the
    [Routing Lab](https://github.com/cdeccio/byu-cs460-f2021/tree/master/lab-routing).
