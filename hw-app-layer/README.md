@@ -243,20 +243,19 @@ This part is an exercise to help you understand SMTP.
 
 ## Getting Started
 
- 1. Start cougarnet.  File `h2-s1.cfg` contains a configuration file that
+ 1. Install swaks (Swiss Army Knife SMTP). Run the following to install swaks:
+
+    ```
+    sudo apt install swaks
+    ```
+
+ 2. Start cougarnet.  File `h2-s1.cfg` contains a configuration file that
     describes a network with two hosts, `a` and `b`, connected to switch `s1`.
 
     Run the following command to create and start the network:
 
     ```bash
     cougarnet --display -w s1 h2-s1.cfg
-    ```
-
- 2. Install swaks (Swiss Army Knife SMTP). Run the following to install swaks:
-    describes a network with two hosts, `a` and `b`, connected to switch `s1`.
-
-    ```
-    sudo apt install swaks
     ```
 
  3. Begin Packet Capture.  Go to the open Wireshark window, click the "Capture
